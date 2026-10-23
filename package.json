@@ -1,0 +1,25 @@
+{
+  "name": "free247editor-automation",
+  "version": "1.0.0",
+  "description": "AI Video Automation Engine for free247editor - Automated storytelling video generation",
+  "type": "module",
+  "bin": {
+    "free247editor": "./src/cli.mjs"
+  },
+  "scripts": {
+    "cli": "node src/cli.mjs",
+    "setup": "node setup.mjs",
+    "test": "echo 'No tests yet'"
+  },
+  "keywords": [
+    "video-automation",
+    "ai-video",
+    "storytelling",
+    "ffmpeg",
+    "svg-animation"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.11.0"
+  }
+}

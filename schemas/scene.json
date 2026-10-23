@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Scene Definition",
+  "type": "object",
+  "required": ["id", "duration"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "URL-safe scene identifier"
+    },
+    "title": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "number",
+      "minimum": 0.1,
+      "description": "Scene duration in seconds"
+    },
+    "background": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["image", "video", "color"]
+        },
+        "asset": {
+          "type": "string",
+          "description": "Relative path to asset, or hex color"
+        },
+        "fit": {
+          "type": "string",
+          "enum": ["cover", "contain", "stretch"],
+          "default": "cover"
+        }
+      }
+    },
+    "characters": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "asset"],
+        "properties": {
+          "id": { "type": "string" },
+          "asset": { "type": "string", "description": "Relative path to SVG or PNG" },
+          "initialState": {
+            "type": "object",
+            "properties": {
+              "x": { "type": "number", "description": "Center X position (0 to width)" },
+              "y": { "type": "number", "description": "Center Y position (0 to height)" },
+              "scale": { "type": "number", "default": 1.0 },
+              "opacity": { "type": "number", "minimum": 0, "maximum": 1, "default": 1.0 },
+              "rotation": { "type": "number", "default": 0 }
+            }
+          },
+          "animations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["startTime", "endTime", "properties"],
+              "properties": {
+                "startTime": { "type": "number" },
+                "endTime": { "type": "number" },
+                "properties": {
+                  "type": "object",
+                  "properties": {
+                    "x": { "type": "number" },
+                    "y": { "type": "number" },
+                    "scale": { "type": "number" },
+                    "opacity": { "type": "number" },
+                    "rotation": { "type": "number" }
+                  }
+                },
+                "easing": {
+                  "type": "string",
+                  "enum": ["linear", "ease-in", "ease-out", "ease-in-out"],
+                  "default": "linear"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "narration": {
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "audioFile": { "type": "string" },
+        "startTime": { "type": "number", "default": 0 },
+        "volume": { "type": "number", "default": 1.0 }
+      }
+    },
+    "soundEffects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "asset": { "type": "string" },
+          "startTime": { "type": "number" },
+          "volume": { "type": "number", "default": 1.0 }
+        }
+      }
+    },
+    "music": {
+      "type": "object",
+      "properties": {
+        "asset": { "type": "string" },
+        "startTime": { "type": "number", "default": 0 },
+        "volume": { "type": "number", "default": 0.3 },
+        "fadeIn": { "type": "number", "default": 0 },
+        "fadeOut": { "type": "number", "default": 0 }
+      }
+    },
+    "subtitle": {
+      "type": "object",
+      "properties": {
+        "text": { "type": "string" },
+        "startTime": { "type": "number", "default": 0 },
+        "endTime": { "type": "number" },
+        "style": { "type": "string", "default": "default" }
+      }
+    },
+    "transitions": {
+      "type": "object",
+      "properties": {
+        "in": { "type": "string", "enum": ["fade", "cut", "slide-left", "slide-right"], "default": "cut" },
+        "out": { "type": "string", "enum": ["fade", "cut", "slide-left", "slide-right"], "default": "cut" },
+        "duration": { "type": "number", "default": 0.5 }
+      }
+    }
+  }
+}
