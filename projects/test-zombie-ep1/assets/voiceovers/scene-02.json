@@ -1,0 +1,81 @@
+{
+  "text": "Marco was closing his jeepney for the night when Jun came running down the street.",
+  "audio_duration_secs": 4.230295,
+  "words": [
+    {
+      "text": "Marco",
+      "start": 0,
+      "end": 0.34
+    },
+    {
+      "text": "was",
+      "start": 0.34,
+      "end": 0.58
+    },
+    {
+      "text": "closing",
+      "start": 0.58,
+      "end": 1.02
+    },
+    {
+      "text": "his",
+      "start": 1.02,
+      "end": 1.32
+    },
+    {
+      "text": "jeepney",
+      "start": 1.32,
+      "end": 1.66
+    },
+    {
+      "text": "for",
+      "start": 1.66,
+      "end": 1.82
+    },
+    {
+      "text": "the",
+      "start": 1.82,
+      "end": 1.98
+    },
+    {
+      "text": "night",
+      "start": 1.98,
+      "end": 2.22
+    },
+    {
+      "text": "when",
+      "start": 2.22,
+      "end": 2.44
+    },
+    {
+      "text": "Jun",
+      "start": 2.44,
+      "end": 2.56
+    },
+    {
+      "text": "came",
+      "start": 2.56,
+      "end": 2.76
+    },
+    {
+      "text": "running",
+      "start": 2.76,
+      "end": 3.1
+    },
+    {
+      "text": "down",
+      "start": 3.1,
+      "end": 3.4
+    },
+    {
+      "text": "the",
+      "start": 3.4,
+      "end": 3.54
+    },
+    {
+      "text": "street.",
+      "start": 3.54,
+      "end": 4.42
+    }
+  ]
+}

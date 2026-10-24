@@ -1,325 +1,129 @@
-# Video Script Template for Claude Code Pro (MCP)
+# Episode Script Format (for ChatGPT)
 
-> **For ChatGPT / Script Writers:** Use this template when generating scripts for the Zombie in Manila animated series. Claude Code Pro reads this exact format and converts it into rendered video scenes.
->
-> **Important:** Follow the syntax precisely. The parser is strict about field names and character positioning.
+> Paste this whole file into ChatGPT together with `series/zombie-outbreak/bible.md`, then ask for
+> the next episode. The video engine reads this format exactly. Anything it doesn't understand is
+> reported by `check`, so follow the rules below.
 
----
+## Episode rules
 
-## Quick Rules
+- One episode = **5 days**, about **2–3 minutes**, roughly **20–30 scenes**.
+- Every day starts with a **day card** scene (`**Card:** DAY 6 | Sampaloc, Manila`).
+- Scenes are short: **3–8 seconds**, 1–2 sentences of narration each.
+- Narration is **English**, third person, simple and punchy. It is voiced in ElevenLabs, one MP3 per scene.
+- Only use the characters, locations, poses, props and verbs listed here.
 
-1. One file per episode
-2. Each scene starts with `## Scene N: Title`
-3. Use `**Field:** value` for metadata
-4. Use `- list items` for multi-value fields (characters, SFX)
-5. Keep scene durations between **3-10 seconds** (shorter = better for social media)
+## Episode header (before Scene 1)
 
----
-
-## Coordinate System (Vertical Video)
-
-The renderer outputs **1080 x 1920** videos (9:16 vertical).
-
-```
-Top-Left: (0, 0)
-Center:    (540, 960)
-Bottom:    (0, 1920)
-Right edge:(1080, 0)
-```
-
-| Position | X | Y | Use for |
-|----------|---|---|---------|
-| Top-center | 540 | 200 | Title cards, flying objects |
-| Center | 540 | 960 | Main characters, focal point |
-| Bottom-left | 200 | 1600 | Side characters, props |
-| Bottom-right | 880 | 1600 | Side characters, props |
-| Lower-third | 540 | 1500 | Subtitles (auto-placed) |
-
-**Scale:** 1.0 = 100% original size. Use 0.5 for far objects, 1.5 for close-ups.
-
----
-
-## Full Field Reference
-
-### **Duration:**
 ```markdown
-**Duration:** 5
+# Zombie Outbreak: Manila — Episode 2 (Days 6–10)
+**Music:** tension.mp3
 ```
-Scene length in seconds. Integer or decimal (e.g., `3.5`).
+`**Music:**` is one background track for the whole episode. It loops under the voice and gets
+quieter while someone speaks. Leave it out for no music.
 
----
+## Scene format
 
-### **Background:**
 ```markdown
-**Background:** #1a1a2e
-```
-- **Hex color:** `#RRGGBB` — solid color background
-- **Image path:** `bg/manila-street.png` — use a background image (placed in `assets/`)
-
----
-
-### **Characters:**
-```markdown
+## Scene 5: The Alley
+**Day:** 7
+**Location:** alley   **Time:** night   **Weather:** rain
 **Characters:**
-- Juan @ (540, 960) scale:1.0
-- Zombie @ (200, 1600) scale:0.8
-- Crowd @ (880, 900) scale:1.2
-```
-**Format:** `Name @ (x, y) scale:N`
-- `Name` becomes the asset filename: `characters/juan.svg`, `characters/zombie.svg`
-- `(x, y)` position in pixels (see coordinate table above)
-- `scale:N` optional, default is 1.0
-
-**Character asset requirements:**
-- SVG format
-- Transparent background
-- Named exactly: `characters/[lowercase-name].svg`
-- Example: `Juan Pedro` → `characters/juan-pedro.svg`
-
----
-
-### **Narration:**
-```markdown
-**Narration:** "Huwag kang lalabas, may zombie sa kanto!"
-```
-This text is:
-1. Spoken by the voiceover actor (you provide `voiceovers/scene-01.mp3`)
-2. Burned into the video as Taglish subtitles
-3. Auto-transcribed via Groq if audio file is present
-
-**Tip:** Keep narrations short and punchy. One or two sentences max per scene.
-
----
-
-### **SFX (Sound Effects):**
-```markdown
+- Marco @ (300, 1650) facing: right
+- Jun @ (180, 1700) facing: right pose: scared
+- Zombie x4 @ (1250, 1660) spread: 360
+**Props:**
+- trash @ (900, 1680)
+**Actions:**
+- 0.2 Zombies shamble to (800, 1660) in 4
+- 1.5 Jun scared
+- 2.0 Camera shake
+- 3.0 Marco attack Zombie 1
+- 4.0 Marco run to (-200, 1650)
+- 4.2 Jun run to (-200, 1700)
+**Narration:** Four of them came out of the dark. Marco swung once, and then they ran.
 **SFX:**
-- gunshot.mp3 @ 0.5
-- glass-break.mp3 @ 2.0
-- zombie-groan.mp3 @ 0.0
-```
-**Format:** `filename.mp3 @ timestamp`
-- `timestamp` = seconds into the scene when the sound plays
-- Place audio files in `assets/sounds/` or `assets/`
-
----
-
-### **Music:**
-```markdown
-**Music:** tense-ambience.mp3
-```
-- Plays throughout the entire scene
-- Auto-ducked (volume lowered) when narration plays
-- Place in `assets/music/` or `assets/`
-- Default volume: 30% (the engine handles mixing)
-
----
-
-### **Transition:**
-```markdown
-**Transition:** fade -> cut
-```
-**Format:** `transition-in -> transition-out`
-
-| Transition | Description |
-|------------|-------------|
-| `cut` | Instant switch (default) |
-| `fade` | Cross-fade |
-| `slide-left` | Slide in from left |
-| `slide-right` | Slide in from right |
-| `zoom-in` | Zoom from center |
-| `zoom-out` | Zoom out to center |
-
-The `->` arrow separates **how the scene enters** from **how the next scene exits**.
-
----
-
-## Complete Episode Example
-
-Below is a full episode script. Use this as your reference for structure, pacing, and asset naming.
-
----
-
-# Zombie in Manila - Episode 1: "First Bite"
-
-## Scene 1: Title Card
-
-**Duration:** 4
-**Background:** #0a0a1a
-**Characters:**
-- TitleText @ (540, 800) scale:1.5
-**Narration:** "Zombie in Manila"
-**Music:** intro-theme.mp3
-**Transition:** fade -> fade
-
----
-
-## Scene 2: Alleyway Setup
-
-**Duration:** 5
-**Background:** bg/manila-alley-night.png
-**Characters:**
-- Juan @ (540, 1200) scale:1.0
-**Narration:** "Madaling araw sa Tondo. Si Juan ay pauwi mula sa trabaho."
-**Music:** tense-ambience.mp3
-**Transition:** fade -> cut
-
----
-
-## Scene 3: The Encounter
-
-**Duration:** 4
-**Background:** bg/manila-alley-night.png
-**Characters:**
-- Juan @ (400, 1200) scale:1.0
-- Zombie @ (700, 1200) scale:1.1
-**Narration:** "May kakaibang tunog..."
-**SFX:**
-- zombie-groan.mp3 @ 1.5
-- heartbeat.mp3 @ 0.0
-**Music:** tense-ambience.mp3
-**Transition:** cut -> cut
-
----
-
-## Scene 4: The Chase
-
-**Duration:** 3
-**Background:** #1a0505
-**Characters:**
-- Juan @ (200, 1200) scale:0.9
-- Zombie @ (800, 1200) scale:1.2
-**Narration:** "Takbo!"
-**SFX:**
-- running-footsteps.mp3 @ 0.0
-- zombie-roar.mp3 @ 0.5
-**Transition:** zoom-in -> slide-left
-
----
-
-## Scene 5: Dead End
-
-**Duration:** 5
-**Background:** bg/brick-wall.png
-**Characters:**
-- Juan @ (540, 1200) scale:1.0
-- Zombie @ (200, 1200) scale:1.1
-**Narration:** "Walang lusot. Kailangan niyang lumaban."
-**SFX:**
-- heavy-breathing.mp3 @ 0.0
-**Music:** suspense-rising.mp3
+- zombie-groan.mp3 @ 0.5
 **Transition:** cut -> fade
-
----
-
-## Scene 6: Fight
-
-**Duration:** 4
-**Background:** bg/brick-wall.png
-**Characters:**
-- Juan @ (500, 1200) scale:1.1
-- Zombie @ (600, 1200) scale:1.0
-- Bat @ (450, 900) scale:0.5
-**Narration:** "Atras o laban!"
-**SFX:**
-- bat-hit.mp3 @ 1.0
-- zombie-pain.mp3 @ 1.2
-**Transition:** fade -> cut
-
----
-
-## Scene 7: Escape
-
-**Duration:** 5
-**Background:** bg/manila-street-dawn.png
-**Characters:**
-- Juan @ (540, 1200) scale:1.0
-**Narration:** "Nakatakas siya... pero hindi pa tapos ang gabi."
-**Music:** tense-ambience.mp3
-**Transition:** fade -> fade
-
----
-
-## Scene 8: Cliffhanger
-
-**Duration:** 4
-**Background:** #0a0a1a
-**Characters:**
-- ToBeContinued @ (540, 960) scale:1.0
-**Narration:** "To be continued..."
-**Music:** outro-theme.mp3
-**Transition:** fade -> fade
-
----
-
-## Asset Checklist for This Episode
-
-After writing the script, ensure these files exist in the project folder:
-
-```
-projects/episode-01/
-├── assets/
-│   ├── characters/
-│   │   ├── juan.svg
-│   │   ├── zombie.svg
-│   │   └── bat.svg
-│   ├── bg/
-│   │   ├── manila-alley-night.png
-│   │   ├── brick-wall.png
-│   │   └── manila-street-dawn.png
-│   ├── sounds/
-│   │   ├── zombie-groan.mp3
-│   │   ├── heartbeat.mp3
-│   │   ├── running-footsteps.mp3
-│   │   ├── zombie-roar.mp3
-│   │   ├── heavy-breathing.mp3
-│   │   ├── bat-hit.mp3
-│   │   └── zombie-pain.mp3
-│   ├── music/
-│   │   ├── intro-theme.mp3
-│   │   ├── tense-ambience.mp3
-│   │   ├── suspense-rising.mp3
-│   │   └── outro-theme.mp3
-│   └── voiceovers/
-│       ├── scene-01.mp3
-│       ├── scene-02.mp3
-│       ├── scene-03.mp3
-│       ├── scene-04.mp3
-│       ├── scene-05.mp3
-│       ├── scene-06.mp3
-│       ├── scene-07.mp3
-│       └── scene-08.mp3
 ```
 
----
+Every field except the heading is optional. `Day`, `Location`, `Time` and `Weather` carry over
+from the previous scene when left out. **Duration** is automatic: the scene lasts as long as its
+voiceover. Add `**Duration:** 6` only to make a scene longer, for example a silent scene.
 
-## Writing Tips for ChatGPT
-
-1. **Pacing:** Alternate between action (3-4s) and dialogue (5-6s). Fast cuts build tension.
-2. **Taglish:** Mix Tagalog and English naturally. "Huwag kang lalabas" is pure Tagalog; "Takbo, we're in danger!" is Taglish.
-3. **Scene count:** 8-12 scenes per episode is ideal for social media (60-90 seconds total).
-4. **Character consistency:** Use the exact same name spelling across all scenes (the parser turns `Juan` into `characters/juan.svg`).
-5. **Voiceover timing:** The narration text should match what the voice actor says in `voiceovers/scene-XX.mp3`.
-6. **Lazy assets:** If you don't have a background image yet, use `#RRGGBB` colors. The renderer converts colors to video frames automatically.
-7. **No characters?** Just omit the `**Characters:**` block entirely for title cards and transitions.
-
----
-
-## Claude Code Pro Workflow
-
-Once ChatGPT produces this script, paste it into Claude Code Pro and say:
-
-```
-Parse this script for project episode-01
+### Day card
+```markdown
+## Scene 1: Day 6
+**Card:** DAY 6 | Sampaloc, Manila
+**Narration:** Day six. The water stopped running.
 ```
 
-Claude will:
-1. Create the project if it doesn't exist
-2. Parse each scene into JSON
-3. Tell you exactly which assets are missing
-4. Let you run `render-scene` for previews
-5. Assemble everything with `assemble` for final export
+## Screen coordinates (vertical 1080 × 1920)
 
----
+```
+x: 0 (left edge) … 540 (center) … 1080 (right edge)
+y: the ground line is at 1500. Characters stand at y 1600–1750
+   (bigger y = closer to the camera, drawn in front).
+Off-screen: x -200 (left) or 1280 (right).
+```
+Keep characters at least ~150 px apart. Put the main character near x 300–700.
 
-*Template version 1.0 — Compatible with free247editor MCP server*
+## Characters
+
+| Name in script | Who |
+|---|---|
+| Marco | Leader, 34, jeepney driver. Red shirt, blue cap, crowbar. |
+| Ana | Nurse, 28. Teal scrubs, ponytail, medkit. |
+| Jun | Student, 17. Yellow shirt, backpack, baseball bat. |
+| Lola Cora | Grandmother, 70, sari-sari store owner. Purple, glasses, frying pan. |
+| Zombie | Normal infected: slow, shambling. |
+| Runner | Fast infected: runs. Only from Day 4 onward. |
+
+Character line options: `facing: left|right`, `pose: <pose>`, `scale: 0.8` (smaller = farther
+away), `holding: bat|pipe|crowbar|knife|bolo|spear|pan|flashlight|none`.
+**Crowds:** `Zombie x6 @ (700, 1660) spread: 500` makes 6 zombies spread over 500 px. In
+actions, `Zombies` moves all of them and `Zombie 2` moves one.
+
+## Actions (one per line, starting with seconds into the scene)
+
+| Action | Example |
+|---|---|
+| walk / run / shamble / sneak to a spot | `1.0 Ana walk to (700, 1650) in 2` (`in 2` = takes 2 s; optional) |
+| move a distance | `1.0 Jun run left 400` |
+| enter from off-screen | `0.5 Marco enter from left running` (walks to his listed position) |
+| leave the screen | `4.0 Ana exit right running` |
+| face a direction | `2.0 Marco face left` |
+| attack someone | `3.0 Marco attack Zombie 1` |
+| fall down (stays down) | `3.4 Zombie 1 fall` |
+| pose | `2.0 Lola Cora point` or `2.0 Jun scared for 1.5` |
+| appear / disappear | `1.0 Runner appear` |
+
+**Poses:** idle, walk, run, sneak, crouch (or hide), sit, scared, point, wave, talk, think, look,
+hold, aim, push, hurt, cheer, swing (or attack), fall, lie (or dead), eat (zombies feeding),
+zidle (zombie standing).
+
+**Camera:** `2.0 Camera shake`, `2.0 Camera flash red` (or `white`), `3.0 Camera zoom 1.3 in 1.5 on Ana`,
+`5.0 Camera fade out`.
+
+## Locations
+
+`street`, `alley`, `house`, `rooftop`, `store` (Lola Cora's sari-sari store), `mall`, `highway`,
+`bridge`, `hospital`, `evac` (evacuation center), `outskirts` (fields/trees outside the city),
+`black` (empty dark).
+**Time:** dawn, day, dusk, night. **Weather:** clear, rain.
+Optional custom image instead: `**Background:** backgrounds/my-picture.png`.
+
+## Props
+
+`- <prop> @ (x, y) scale: 1 facing: left` with props: barricade, crate, door, car, jeepney, fire,
+supplies, cot, table, trash.
+
+## Sound
+
+- `**SFX:**` list: `- file.mp3 @ 1.5` (seconds into the scene). Files go in `assets/sounds/`.
+- Narration MP3s are named after the scene: `scene-01.mp3`, `scene-02.mp3`, …
+
+## Writing tips
+
+- Show, don't tell: give every scene at least one action so something moves.
+- One idea per scene. Cliffhanger in the last scene of each episode.
+- End each day with a survival lesson or a hard choice. That's the hook of the series.

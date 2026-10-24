@@ -5,6 +5,13 @@ import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 
+// Apps launched outside a terminal (Claude Desktop, editors) often lack Homebrew on PATH.
+for (const dir of ['/opt/homebrew/bin', '/usr/local/bin']) {
+  if (existsSync(dir) && !(process.env.PATH || '').split(':').includes(dir)) {
+    process.env.PATH = `${dir}:${process.env.PATH || ''}`;
+  }
+}
+
 export function getProjectDirs(projectId) {
   const base = join(root, 'projects', projectId);
   return {

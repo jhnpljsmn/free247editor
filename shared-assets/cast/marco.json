@@ -1,0 +1,16 @@
+{
+  "name": "Marco",
+  "role": "Survivor, group leader. 34, jeepney driver from Tondo. Calm, protective, makes the hard calls.",
+  "color": "#f2f2f2",
+  "shirt": "#c0392b",
+  "pants": "#2c3e50",
+  "headFill": "#e9c9a0",
+  "height": 1.05,
+  "build": "normal",
+  "hair": "short",
+  "hairColor": "#1b1b1b",
+  "hat": "cap",
+  "hatColor": "#1f3a68",
+  "accessory": "none",
+  "weapon": "crowbar"
+}

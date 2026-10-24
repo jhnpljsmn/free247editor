@@ -170,10 +170,10 @@ export async function renderScene(scene, project, projectDirs, { quality = 'prev
       let f = `[${input.idx}:a]`;
 
       if (input.startTime && input.startTime > 0) {
-        f += `adelay=delays=${Math.round(input.startTime * 1000)}:all=1`;
+        f += `adelay=delays=${Math.round(input.startTime * 1000)}:all=1,`;
       }
 
-      f += `,volume=${input.volume}`;
+      f += `volume=${input.volume}`;
 
       if (input.fadeIn) {
         f += `,afade=t=in:st=${input.startTime || 0}:d=${input.fadeIn}`;

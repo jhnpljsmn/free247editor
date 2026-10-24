@@ -1,11 +1,18 @@
 #!/usr/bin/env node
 import { createProject, loadProject, deleteProject, listProjects, getProjectDirs, saveProject } from './project.mjs';
 import { syncRegistry } from './asset-registry.mjs';
-import { parseScript, interactiveScriptBuilder } from './script-parser.mjs';
+import { parseEpisodeFile, interactiveScriptBuilder } from './script-parser.mjs';
 import { generateScenePlan, loadScenePlan } from './scene-planner.mjs';
-import { renderScene, renderProject } from './render-engine.mjs';
-import { join } from 'node:path';
-import { existsSync } from 'node:fs';
+import { renderScene, renderEpisode } from './stick/renderer.mjs';
+import { renderCastSheet } from './stick/castsheet.mjs';
+import { checkProject, writeVoiceLines } from './check.mjs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { existsSync, readdirSync, writeFileSync, copyFileSync, mkdirSync } from 'node:fs';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const flag = (name) => args.includes(name);
+const option = (name, fallback) => (args.indexOf(name) >= 0 ? args[args.indexOf(name) + 1] : fallback);
 
 const command = process.argv[2];
 const args = process.argv.slice(3);
@@ -21,18 +28,23 @@ Commands:
   list-projects                                              List all projects
   delete-project <id>                                        Delete a project
   sync-assets                                                Sync shared asset registry
-  import-script <project-id> <script.md>                     Import a script file
+  import-script <project-id> [script.md]                     Import a script (default: projects/<id>/script.md)
+  voice-lines <project-id>                                   Write voiceover-lines.txt for ElevenLabs
+  check <project-id>                                         Report script problems and missing files
+  render <project-id> [--quality <preview|final>]            Render the episode to outbox/
+         [--scenes scene-02,scene-05] [--force] [--no-transcribe]
+  render-scene <project-id> <scene-id> [--quality <q>]       Render a single scene
+  cast-sheet                                                 Draw the character worksheet PNG
   build-scenes <project-id>                                  Interactive scene builder
   plan <project-id>                                          Generate/update scene plan
-  render <project-id> [--quality <preview|final>]            Render all scenes
-  render-scene <project-id> <scene-id> [--quality <q>]       Render a single scene
   status <project-id>                                        Show project status
   help                                                       Show this help
 
 Examples:
   node src/cli.mjs create-project zombie-in-manila --format vertical
-  node src/cli.mjs import-script zombie-in-manila script.md
-  node src/cli.mjs render zombie-in-manila --quality final
+  node src/cli.mjs import-script manila-ep01
+  node src/cli.mjs check manila-ep01
+  node src/cli.mjs render manila-ep01 --quality final
 `);
 }
 
@@ -88,22 +100,49 @@ async function main() {
 
       case 'import-script': {
         const projectId = args[0];
-        const scriptPath = args[1];
         const project = loadProject(projectId);
         const dirs = getProjectDirs(projectId);
+        const scriptPath = args[1] && !args[1].startsWith('--') ? args[1] : join(dirs.root, 'script.md');
 
-        const scenes = await parseScript(scriptPath);
+        const { meta, scenes } = await parseEpisodeFile(scriptPath);
+        mkdirSync(dirs.scenes, { recursive: true });
+        for (const f of readdirSync(dirs.scenes)) {
+          if (/^scene-\d+\.json$/.test(f) && !scenes.some((s) => `${s.id}.json` === f)) {
+            (await import('node:fs')).rmSync(join(dirs.scenes, f));
+          }
+        }
         for (const scene of scenes) {
-          const scenePath = join(dirs.scenes, `${scene.id}.json`);
-          const fs = await import('node:fs');
-          fs.writeFileSync(scenePath, JSON.stringify(scene, null, 2));
+          writeFileSync(join(dirs.scenes, `${scene.id}.json`), JSON.stringify(scene, null, 2));
         }
 
         project.scenes = scenes.map(s => s.id);
-        project.updated = new Date().toISOString();
+        if (meta.title) project.name = meta.title;
+        project.music = meta.music;
         saveProject(project);
 
-        console.log(`Imported ${scenes.length} scenes from ${scriptPath}`);
+        const warnings = scenes.reduce((n, s) => n + s.warnings.length, 0);
+        console.log(`Imported ${scenes.length} scenes${warnings ? `, ${warnings} warning(s) — run check` : ''}.`);
+        break;
+      }
+
+      case 'voice-lines': {
+        const project = loadProject(args[0]);
+        const { path, count } = writeVoiceLines(project, getProjectDirs(args[0]));
+        console.log(`Wrote ${count} voiceover lines to ${path}`);
+        break;
+      }
+
+      case 'check': {
+        const project = loadProject(args[0]);
+        const { problems, missingVoice } = checkProject(project, getProjectDirs(args[0]));
+        for (const p of problems) console.log(`- ${p}`);
+        if (missingVoice.length) console.log(`- missing voiceovers (${missingVoice.length}): ${missingVoice.map((v) => v.split('/').pop()).join(', ')}`);
+        if (!problems.length && !missingVoice.length) console.log('All good. Ready to render.');
+        break;
+      }
+
+      case 'cast-sheet': {
+        console.log(`Cast sheet: ${renderCastSheet()}`);
         break;
       }
 
@@ -135,24 +174,32 @@ async function main() {
 
       case 'render': {
         const projectId = args[0];
-        const qualityIndex = args.indexOf('--quality');
-        const quality = qualityIndex >= 0 ? args[qualityIndex + 1] : 'preview';
-
+        const quality = option('--quality', 'preview');
         const project = loadProject(projectId);
         const dirs = getProjectDirs(projectId);
+        const only = option('--scenes', null)?.split(',');
 
-        console.log(`Rendering project: ${project.name} (${quality} quality)`);
-        const outputPath = await renderProject(project, dirs, { quality });
-        console.log(`\nRender complete: ${outputPath}`);
+        console.log(`Rendering ${project.name} (${quality})`);
+        const started = Date.now();
+        const { path, duration } = await renderEpisode(project, dirs, { quality, only, force: flag('--force'), transcribe: !flag('--no-transcribe') });
+
+        const outbox = join(root, 'outbox');
+        mkdirSync(outbox, { recursive: true });
+        let out = join(outbox, `${projectId}-final.mp4`);
+        if (quality !== 'final') {
+          let v = 1;
+          while (existsSync(join(outbox, `${projectId}-v${v}.mp4`))) v++;
+          out = join(outbox, `${projectId}-v${v}.mp4`);
+        }
+        copyFileSync(path, out);
+        console.log(`Done: ${out} (${duration.toFixed(1)}s video, rendered in ${((Date.now() - started) / 1000).toFixed(0)}s)`);
         break;
       }
 
       case 'render-scene': {
         const projectId = args[0];
         const sceneId = args[1];
-        const qualityIndex = args.indexOf('--quality');
-        const quality = qualityIndex >= 0 ? args[qualityIndex + 1] : 'preview';
-
+        const quality = option('--quality', 'preview');
         const project = loadProject(projectId);
         const dirs = getProjectDirs(projectId);
         const scenePath = join(dirs.scenes, `${sceneId}.json`);
@@ -163,11 +210,10 @@ async function main() {
 
         const fs = await import('node:fs');
         const scene = JSON.parse(fs.readFileSync(scenePath, 'utf8'));
-        const outputPath = join(dirs.preview, `${sceneId}.mp4`);
+        const outputPath = join(quality === 'final' ? dirs.final : dirs.preview, `${sceneId}.mp4`);
 
-        console.log(`Rendering scene: ${scene.title || sceneId}`);
-        await renderScene(scene, project, dirs, { quality, outputPath });
-        console.log(`Output: ${outputPath}`);
+        const r = await renderScene(scene, project, dirs, { quality, outputPath, force: true, transcribe: !flag('--no-transcribe') });
+        console.log(`Output: ${outputPath} (${r.duration.toFixed(1)}s)`);
         break;
       }
 

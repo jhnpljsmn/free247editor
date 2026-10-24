@@ -1,0 +1,36 @@
+{
+  "text": "Day 1, nobody believed the news.",
+  "audio_duration_secs": 2.33678,
+  "words": [
+    {
+      "text": "Day",
+      "start": 0,
+      "end": 0.22
+    },
+    {
+      "text": "1,",
+      "start": 0.22,
+      "end": 0.84
+    },
+    {
+      "text": "nobody",
+      "start": 0.84,
+      "end": 1.1
+    },
+    {
+      "text": "believed",
+      "start": 1.1,
+      "end": 1.58
+    },
+    {
+      "text": "the",
+      "start": 1.58,
+      "end": 1.74
+    },
+    {
+      "text": "news.",
+      "start": 1.74,
+      "end": 2.54
+    }
+  ]
+}

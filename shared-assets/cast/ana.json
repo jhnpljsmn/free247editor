@@ -1,0 +1,15 @@
+{
+  "name": "Ana",
+  "role": "Survivor, nurse. 28, from a Manila public hospital. Smart, brave, keeps everyone alive.",
+  "color": "#f2f2f2",
+  "shirt": "#1abc9c",
+  "pants": "#34495e",
+  "headFill": "#ecd0ad",
+  "height": 0.95,
+  "build": "thin",
+  "hair": "ponytail",
+  "hairColor": "#2b1a10",
+  "hat": "none",
+  "accessory": "medkit",
+  "weapon": "none"
+}

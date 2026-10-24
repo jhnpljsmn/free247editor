@@ -1,0 +1,16 @@
+{
+  "name": "Runner",
+  "aliases": ["Fast Zombie"],
+  "role": "Fast infected (freshly turned). Runs, screams, hunts alone. Appears from Day 4 onward.",
+  "color": "#a7c957",
+  "shirt": "#7a1f1f",
+  "pants": "#2f2f2f",
+  "headFill": "#c9e2a8",
+  "height": 1.0,
+  "build": "thin",
+  "hair": "short",
+  "hairColor": "#3a3a3a",
+  "weapon": "none",
+  "zombie": true,
+  "speed": "fast"
+}

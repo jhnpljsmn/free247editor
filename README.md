@@ -2,6 +2,18 @@
 
 This fork adds a **deterministic, token-efficient video automation engine** to the original free247editor, enabling automated storytelling video generation from scripts, SVG characters, and pre-generated voiceovers.
 
+## Zombie Outbreak series
+
+Stick-figure episodes are drawn by code (`src/stick/`) from character sheets in
+`shared-assets/cast/`. See **INSTRUCTIONS.md** for the episode workflow, `script-template.md` for
+the script format, and `series/zombie-outbreak/bible.md` for the story.
+
+```bash
+node src/cli.mjs import-script manila-ep01
+node src/cli.mjs check manila-ep01
+node src/cli.mjs render manila-ep01
+```
+
 ## New Capabilities
 
 - **Multi-project workspace**: Organize episodes in separate project folders
