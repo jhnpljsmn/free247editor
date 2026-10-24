@@ -4,7 +4,8 @@ import { syncRegistry } from './asset-registry.mjs';
 import { parseEpisodeFile } from './script-parser.mjs';
 import { renderScene, renderEpisode } from './stick/renderer.mjs';
 import { renderCastSheet } from './stick/castsheet.mjs';
-import { checkProject, writeVoiceLines } from './check.mjs';
+import { checkProject, writeVoiceLines, validateVideo } from './check.mjs';
+import { collectAssets, planAssets } from './production.mjs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { existsSync, readdirSync, readFileSync, writeFileSync, copyFileSync, mkdirSync } from 'node:fs';
@@ -29,6 +30,7 @@ Commands:
   sync-assets                                                Sync shared asset registry
   import-script <project-id> [script.md]                     Import a script (default: projects/<id>/script.md)
   voice-lines <project-id>                                   Write voiceover-lines.txt for ElevenLabs
+  plan-assets <project-id>                                   Write production/asset-checklist.md (reused vs missing assets)
   check <project-id>                                         Report script problems and missing files
   render <project-id> [--quality <preview|final>]            Render the episode to outbox/
          [--scenes scene-02,scene-05] [--force] [--no-transcribe]
@@ -131,10 +133,23 @@ async function main() {
 
       case 'check': {
         const project = loadProject(args[0]);
-        const { problems, missingVoice } = checkProject(project, getProjectDirs(args[0]));
+        const dirs = getProjectDirs(args[0]);
+        const { problems, missingVoice } = checkProject(project, dirs);
+        const { missing } = collectAssets(project, dirs);
         for (const p of problems) console.log(`- ${p}`);
         if (missingVoice.length) console.log(`- missing voiceovers (${missingVoice.length}): ${missingVoice.map((v) => v.split('/').pop()).join(', ')}`);
-        if (!problems.length && !missingVoice.length) console.log('All good. Ready to render.');
+        for (const s of missing.sprites) console.log(`- missing sprite ${s.file}${s.hasSprites ? '' : ' (drawn by code until added)'}`);
+        for (const b of missing.backgrounds) console.log(`- missing background ${b.file}`);
+        if (missing.approximated.length) console.log(`  (${missing.approximated.length} looks use a close sprite; see plan-assets)`);
+        if (!problems.length && !missingVoice.length && !missing.sprites.length && !missing.backgrounds.length) console.log('All good. Ready to render.');
+        break;
+      }
+
+      case 'plan-assets': {
+        const project = loadProject(args[0]);
+        const { dir, missing } = planAssets(project, getProjectDirs(args[0]));
+        console.log(`Wrote ${dir}/asset-checklist.md and missing.json`);
+        console.log(`Missing: ${missing.sprites.length} sprites, ${missing.backgrounds.length} backgrounds, ${missing.files.length} audio files; ${missing.approximated.length} looks use a close sprite`);
         break;
       }
 
@@ -163,6 +178,7 @@ async function main() {
           out = join(outbox, `${projectId}-v${v}.mp4`);
         }
         copyFileSync(path, out);
+        for (const p of validateVideo(out, duration, project.resolution)) console.log(`WARNING: ${p}`);
         console.log(`Done: ${out} (${duration.toFixed(1)}s video, rendered in ${((Date.now() - started) / 1000).toFixed(0)}s)`);
         break;
       }

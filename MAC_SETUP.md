@@ -153,7 +153,7 @@ Then chat with it inside the terminal.
 
 ## Step 4 — Groq API Key (for Subtitles)
 
-If you want automatic Taglish subtitle transcription, get a free Groq key:
+If you want automatic word-by-word captions, get a free Groq key:
 
 1. Go to https://console.groq.com/keys
 2. Create a free account

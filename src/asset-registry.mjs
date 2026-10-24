@@ -61,6 +61,7 @@ export function scanAssets(type) {
   const results = {};
 
   for (const file of files) {
+    if (file.startsWith('.')) continue;
     const filePath = join(dir, file);
     const stat = statSync(filePath);
     if (stat.isFile()) {
@@ -79,21 +80,23 @@ export function scanAssets(type) {
   return results;
 }
 
+// Sprites per character: shared-assets/cast/<character>/<pose>-<expression>.png
+function scanSprites() {
+  const dir = join(sharedAssetsDir, 'cast');
+  const results = {};
+  if (!existsSync(dir)) return results;
+  for (const id of readdirSync(dir)) {
+    if (!statSync(join(dir, id)).isDirectory()) continue;
+    const looks = readdirSync(join(dir, id)).filter((f) => f.endsWith('.png')).map((f) => f.slice(0, -4)).sort();
+    if (looks.length) results[id] = { id, path: `shared-assets/cast/${id}/`, looks };
+  }
+  return results;
+}
+
 export function syncRegistry() {
   const registry = loadRegistry();
-  const types = ['characters', 'backgrounds', 'sounds', 'animations'];
-
-  for (const type of types) {
-    const scanned = scanAssets(type);
-    for (const [id, data] of Object.entries(scanned)) {
-      if (!registry.assets[type]) registry.assets[type] = {};
-      if (!registry.assets[type][id]) {
-        registry.assets[type][id] = data;
-      } else {
-        registry.assets[type][id] = { ...registry.assets[type][id], ...data };
-      }
-    }
-  }
+  // Rebuilt from disk each time, so deleted files drop out.
+  registry.assets = { sprites: scanSprites(), backgrounds: scanAssets('backgrounds'), sounds: scanAssets('sounds') };
 
   saveRegistry(registry);
   return registry;

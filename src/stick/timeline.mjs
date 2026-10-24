@@ -25,6 +25,7 @@ export function characterAt(char, sheet, actions, t, w) {
   let x = char.x, y = char.y, facing = char.facing || 1;
   let visible = !char.hidden, appearedAt = char.hidden ? null : 0;
   let current = rest;
+  let expression = char.expression;
   let motion = null;
   const segments = [{ start: 0, pose: rest }];
   const setPose = (pose, at) => {
@@ -85,6 +86,9 @@ export function characterAt(char, sheet, actions, t, w) {
           if (end <= t && !actions.some((b) => b.time > a.time && b.time < end)) setPose(rest, end);
         }
         break;
+      case 'expression':
+        expression = a.expression;
+        break;
       case 'face':
         facing = a.dir === 'left' ? -1 : 1;
         break;
@@ -122,7 +126,7 @@ export function characterAt(char, sheet, actions, t, w) {
     angles = blendPoses(evalPose(prev.pose, t - prev.start, t), angles, (t - last.start) / BLEND);
   }
 
-  return { x, y, facing, visible, poseName: pose, angles, appearedAt, phaseStart };
+  return { x, y, facing, visible, poseName: pose, expression, angles, appearedAt, phaseStart };
 }
 
 /** Actions for one character, sorted by time. */

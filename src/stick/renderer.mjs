@@ -1,7 +1,7 @@
 // Renders a stick-figure scene: frames are drawn on a canvas and piped to FFmpeg with the audio.
 import { createCanvas } from '@napi-rs/canvas';
 import { spawn, spawnSync } from 'node:child_process';
-import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync, mkdirSync, copyFileSync, readdirSync, statSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -10,8 +10,9 @@ import { buildAudio, probeDuration } from '../audio.mjs';
 import { runFFmpeg } from '../utils/paths.mjs';
 import { loadCast, sheetOrDefault } from './cast.mjs';
 import { drawFigure } from './figure.mjs';
+import { preloadSprites, drawSprite, spriteNames, spriteDir } from './sprites.mjs';
 import { characterAt, actionsFor } from './timeline.mjs';
-import { buildBackdrop, drawRain } from './backdrops.mjs';
+import { buildBackdrop, drawRain, locationImage } from './backdrops.mjs';
 import { drawProp } from './props.mjs';
 import { cameraAt, applyCamera, drawOverlays, drawDayBadge, drawCard } from './effects.mjs';
 import { buildCaptions, drawCaptions } from './captions.mjs';
@@ -66,9 +67,15 @@ export function sceneDuration(scene, voice) {
 function sceneHash(scene, dirs, quality, cast) {
   const h = createHash('sha1');
   h.update(JSON.stringify({ ENGINE_VERSION, scene, quality }));
-  for (const c of scene.characters || []) h.update(JSON.stringify(sheetOrDefault(cast, c.name || c.id)));
+  for (const c of scene.characters || []) {
+    const sheet = sheetOrDefault(cast, c.name || c.id);
+    h.update(JSON.stringify(sheet));
+    for (const n of spriteNames(sheet)) h.update(`${n}:${statSync(join(spriteDir(sheet), `${n}.png`)).mtimeMs}`);
+  }
   const voice = voicePath(scene, dirs);
   if (voice) h.update(readFileSync(voice));
+  const bg = scene.background?.type === 'image' ? scene.background.asset : scene.location && locationImage(scene.location, scene.time, (r) => resolveAsset(r, dirs));
+  if (bg) { try { h.update(readFileSync(resolveAsset(bg, dirs))); } catch {} }
   for (const s of scene.soundEffects || []) {
     try { h.update(readFileSync(resolveAsset(s.asset, dirs))); } catch {}
   }
@@ -100,6 +107,7 @@ export async function renderScene(scene, project, dirs, { quality = 'preview', o
     sheet: sheetOrDefault(cast, c.name || c.id),
     actions: actionsFor(scene, c.id),
   }));
+  const sprites = await preloadSprites(chars.map((c) => c.sheet));
 
   // Audio: voice, then SFX, then this scene's own music (episode music is mixed at assembly).
   const tracks = [];
@@ -153,7 +161,10 @@ export async function renderScene(scene, project, dirs, { quality = 'preview', o
       drawables.push({
         y: s.y,
         draw: () => {
-          const { headTop } = drawFigure(ctx, c.sheet, { ...s, scale: c.char.scale, holding: c.char.holding }, figureH);
+          const set = sprites.get(c.sheet.id);
+          const { headTop } = set?.names.length
+            ? drawSprite(ctx, c.sheet, set, { ...s, scale: c.char.scale }, figureH, t)
+            : drawFigure(ctx, c.sheet, { ...s, scale: c.char.scale, holding: c.char.holding }, figureH);
           if (c.char.showName && s.appearedAt !== null && t - s.appearedAt < 2.5) {
             drawNameTag(ctx, c.sheet.name || c.char.name, s.x, headTop - 30, 1 - Math.max(0, t - s.appearedAt - 2) / 0.5);
           }

@@ -448,6 +448,14 @@ const DRAW = {
 };
 
 /** Draw a scene's static background onto a new canvas. */
+/** Image for a custom location, or null. */
+export function locationImage(location, time, resolveAsset) {
+  for (const ref of [`backgrounds/${location}-${time}.png`, `backgrounds/${location}.png`]) {
+    try { resolveAsset(ref); return ref; } catch {}
+  }
+  return null;
+}
+
 export async function buildBackdrop(scene, w, h, resolveAsset) {
   const canvas = createCanvas(w, h);
   const ctx = canvas.getContext('2d');
@@ -465,8 +473,11 @@ export async function buildBackdrop(scene, w, h, resolveAsset) {
     return canvas;
   }
 
-  const loc = normalizeLocation(scene.location) || 'street';
   const time = TIMES.includes(scene.time) ? scene.time : 'night';
+  // A location without a drawn backdrop uses backgrounds/<location>-<time>.png or backgrounds/<location>.png.
+  const custom = scene.location && !normalizeLocation(scene.location) && locationImage(scene.location, time, resolveAsset);
+  if (custom) return buildBackdrop({ background: { type: 'image', asset: custom } }, w, h, resolveAsset);
+  const loc = normalizeLocation(scene.location) || 'street';
   const pal = PALETTE[time];
   const seed = [...loc].reduce((a, c) => a * 31 + c.charCodeAt(0), 7);
   DRAW[loc](ctx, w, h, h * GROUND, pal, time, rng(seed));

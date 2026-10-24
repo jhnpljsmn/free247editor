@@ -1,6 +1,6 @@
 # free247editor - Claude Pro MCP Edition
 
-An MCP (Model Context Protocol) server that turns **Claude Pro Desktop** into your video editor. Drop in assets, paste a script, and Claude Pro assembles Filipino animated storytelling videos with burned-in subtitles, music ducking, and auto-animations.
+An MCP (Model Context Protocol) server that turns **Claude Pro Desktop** into your video editor. Drop in assets, paste a script, and Claude Pro assembles animated storytelling videos with burned-in subtitles, music ducking, and auto-animations.
 
 ## Workflow Overview
 
@@ -95,14 +95,14 @@ projects/zombie-ep1/assets/voiceovers/episode-01-v1.mp3
 **You type in Claude:**
 
 ```
-Transcribe the voiceover for Taglish subtitles.
+Transcribe the voiceover for English captions.
 ```
 
 **Claude calls:** `transcribe` with `voiceoverFile: "episode-01-v1.mp3"`
 
 **What happens:**
 1. Uploads audio to Groq API (free tier)
-2. Gets word-level timestamps for Filipino/Taglish
+2. Gets word-level timestamps for English
 3. Generates `episode-01-v1.json` (transcript) and `episode-01-v1.srt` (subtitles)
 4. Saves to `projects/zombie-ep1/assets/transcripts/`
 
@@ -145,7 +145,7 @@ Export the final video. I want it vertical for TikTok.
 |------|-------------|--------------------|
 | `create-project` | Creates project folder with assets, scenes, renders subdirectories | User says "new episode" or "create project" |
 | `parse-script` | Converts markdown script to structured scene JSON files | User pastes a script |
-| `transcribe` | Uploads voiceover to Groq for Filipino/Taglish subtitles | User asks for subtitles or transcription |
+| `transcribe` | Uploads voiceover to Groq for English captions | User asks for subtitles or transcription |
 | `render-scene` | Renders one scene as MP4 with characters, background, auto-animations | User says "render scene X" or preview |
 | `assemble` | Concatenates all scenes, mixes audio with ducking, burns subtitles, exports MP4 | User says "export final" or "render full video" |
 | `status` | Lists project state (scenes, assets, renders) | User asks "what's ready" or "what's missing" |
@@ -202,7 +202,7 @@ projects/ep1/assets/
 ### Auto-Animations
 Characters automatically fade in when a scene starts. No commands needed. Staggered by 0.3s per character.
 
-### Filipino/Taglish Subtitles
+### English Subtitles
 Groq Whisper-Large-V3 transcribes with word-level accuracy. Automatically burned into video with bold white text and black outline.
 
 ### Audio Ducking
@@ -261,7 +261,7 @@ I want to create an episode for my Zombie in Manila series. Here's my workflow:
 2. I'll upload assets (SVGs, backgrounds, voiceovers) to the project folder
 3. I'll paste the script.md
 4. You parse it and render previews
-5. You transcribe the voiceover for Taglish subtitles
+5. You transcribe the voiceover for English captions
 6. You assemble the final MP4
 
 Before exporting, ask me if I want vertical (TikTok) or horizontal (YouTube) format.

@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { POSES } from './stick/figure.mjs';
 import { PROPS } from './stick/props.mjs';
+import { EXPRESSIONS } from './stick/sprites.mjs';
 
 export async function parseScript(scriptPath) {
   return (await parseEpisodeFile(scriptPath)).scenes;
@@ -219,8 +220,10 @@ function parseCharacters(lines, warnings) {
       pose: opts.pose && POSES[opts.pose] ? opts.pose : undefined,
       scale: parseFloat(opts.scale) || 1,
       holding: opts.holding,
+      expression: EXPRESSIONS.includes(opts.expression) ? opts.expression : undefined,
       hidden: !!opts.hidden,
     };
+    if (opts.expression && !EXPRESSIONS.includes(opts.expression)) warnings.push(`Unknown expression "${opts.expression}" for ${name} (use: ${EXPRESSIONS.join(', ')})`);
     if (opts.pose && !POSES[opts.pose]) warnings.push(`Unknown pose "${opts.pose}" for ${name}`);
     const count = m[2] ? parseInt(m[2], 10) : 1;
     if (count === 1) {
@@ -344,8 +347,10 @@ function parseAction(line, scene, actors, warnings) {
     push({ verb: 'disappear' });
   } else if ((v = verbText.match(/^(?:pose\s+|is\s+|looks\s+|gets\s+|starts\s+(?:to\s+)?)?(\w+?)(?:s|es|ing)?(?:\s+for\s+([\d.]+)\s*s?)?$/)) && poseName(v[1])) {
     push({ verb: 'pose', pose: poseName(v[1]), duration: v[2] ? parseFloat(v[2]) : undefined });
+  } else if ((v = verbText.match(/^(?:expression\s+|is\s+|looks?\s+|gets\s+)?(\w+)$/)) && EXPRESSIONS.includes(v[1])) {
+    push({ verb: 'expression', expression: v[1] });
   } else {
-    warnings.push(`Unknown action: "${line}" (verbs: walk/run/shamble/sneak to (x, y), enter from left/right, exit left/right, face left/right, attack <name>, fall, or a pose: ${Object.keys(POSES).join(', ')})`);
+    warnings.push(`Unknown action: "${line}" (verbs: walk/run/shamble/sneak to (x, y), enter from left/right, exit left/right, face left/right, attack <name>, fall, expression <${EXPRESSIONS.join('|')}>, or a pose: ${Object.keys(POSES).join(', ')})`);
   }
 }
 

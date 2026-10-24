@@ -1,122 +1,38 @@
-# Free Personal AI Video Editor - Automation Engine
+# free247editor: Zombie Outbreak video engine
 
-This fork adds a **deterministic, token-efficient video automation engine** to the original free247editor, enabling automated storytelling video generation from scripts, SVG characters, and pre-generated voiceovers.
+Turns an episode script into a vertical (1080×1920) video: static 2D stick-figure sprites,
+code-drawn or image backgrounds, ElevenLabs narration, word-by-word captions, sound effects and music.
+Rendering is local and deterministic (canvas + FFmpeg); AI is only used to write scripts and prompts.
 
-## Zombie Outbreak series
-
-Stick-figure episodes are drawn by code (`src/stick/`) from character sheets in
-`shared-assets/cast/`. See **INSTRUCTIONS.md** for the episode workflow, `script-template.md` for
-the script format, and `series/zombie-outbreak/bible.md` for the story.
+- **`INSTRUCTIONS.md`**: how to make an episode, step by step
+- **`script-template.md`**: the script format
+- **`series/zombie-outbreak/bible.md`**: the story
+- **`shared-assets/flow-style.md`**: how character and background images are made
+- **`MAC_SETUP.md`**: installing on a new Mac
+- **`MCP-README.md`**: the optional Claude Desktop MCP server
 
 ```bash
 node src/cli.mjs import-script manila-ep01
+node src/cli.mjs plan-assets manila-ep01
 node src/cli.mjs check manila-ep01
 node src/cli.mjs render manila-ep01
 ```
 
-## New Capabilities
+Needs Node.js 20+, FFmpeg, and `npm install`. Captions use a free Groq key in `.env` (see `.env.example`).
 
-- **Multi-project workspace**: Organize episodes in separate project folders
-- **Script-to-scene pipeline**: Parse Markdown scripts into structured scene JSON
-- **SVG character animation**: Simple transform-based animation (position, scale, opacity, rotation)
-- **FFmpeg-based rendering**: Deterministic, fast, no AI inference during rendering
-- **Audio synchronization**: Mix narration, sound effects, and background music
-- **Subtitle burn-in**: Automated subtitle generation and overlay
-- **Token-efficient**: AI used only for creative planning, everything else runs locally
+## Code
 
-## Quick Start
-
-### 1. Create a Project
-```bash
-node src/cli.mjs create-project zombie-in-manila --format vertical
-```
-
-### 2. Add Assets
-Place your files in the project folder:
-```
-projects/zombie-in-manila/assets/
-  characters/hero.svg
-  characters/zombie.svg
-  backgrounds/manila-street.png
-  sounds/zombie-growl.mp3
-  voiceovers/episode-01.mp3
-```
-
-### 3. Create Scenes
-
-**Option A: Import from script**
-```bash
-node src/cli.mjs import-script zombie-in-manila script.md
-```
-
-**Option B: Interactive builder**
-```bash
-node src/cli.mjs build-scenes zombie-in-manila
-```
-
-**Option C: Manual JSON**
-Edit `projects/zombie-in-manila/scenes/scene-01.json` directly.
-
-### 4. Render
-```bash
-# Preview (fast, lower quality)
-node src/cli.mjs render zombie-in-manila --quality preview
-
-# Final (slow, high quality)
-node src/cli.mjs render zombie-in-manila --quality final
-```
-
-## Script Format
-
-```markdown
-## Scene 1: The Encounter
-**Duration:** 5
-**Background:** backgrounds/manila-street.png
-**Characters:**
-- Hero @ (540, 1200) scale: 1.0
-- Zombie @ (200, 1200) scale: 1.2
-**Narration:** It was a quiet night in Manila, until they came.
-**SFX:**
-- sounds/zombie-growl.mp3 @ 2.5
-**Music:** sounds/tension.mp3
-**Transition:** fade -> fade
-```
-
-## Architecture
-
-The automation engine consists of:
-
-- `src/project.mjs` - Project CRUD operations
-- `src/asset-registry.mjs` - Reusable asset catalog
-- `src/script-parser.mjs` - Script parsing (Markdown → Scene JSON)
-- `src/scene-planner.mjs` - Scene plan generation and validation
-- `src/svg-converter.mjs` - SVG → PNG conversion for FFmpeg
-- `src/render-engine.mjs` - FFmpeg-based scene rendering and concatenation
-- `src/subtitle-gen.mjs` - Subtitle generation and burn-in
-- `src/cli.mjs` - Command-line interface
-
-## Scene JSON Schema
-
-Each scene is a JSON file with:
-- `id`, `title`, `duration`
-- `background`: image/video/color
-- `characters`: array with position, scale, opacity, rotation, animations
-- `narration`: text + audio file
-- `soundEffects`: timed SFX
-- `music`: background music with fade
-- `subtitle`: text overlay
-- `transitions`: in/out fade or slide
-
-## Asset Resolution
-
-Assets are resolved in this order:
-1. `projects/<id>/assets/<path>` (project-specific)
-2. `shared-assets/<path>` (reusable library)
-3. Root-relative paths
-
-## Original free247editor
-
-The original motion-graphics editing capabilities via Herk Edit Kit are preserved. Use `kit/` for advanced motion graphics and the agent-driven "edit this" workflow.
+| Path | What it does |
+|---|---|
+| `src/cli.mjs` | Commands (`node src/cli.mjs help`) |
+| `src/script-parser.mjs` | `script.md` → scene JSON |
+| `src/production.mjs` | Asset checklist: what each scene needs, what is reused or missing |
+| `src/check.mjs` | Pre-render checks, voiceover lines, render validation |
+| `src/stick/` | The renderer: sprites, code-drawn figures, backdrops, props, captions, camera |
+| `src/audio.mjs` | Voice, SFX and music mixing |
+| `src/asset-registry.mjs` | `shared-assets/registry.json`, the reusable asset list |
+| `tools/transcribe.mjs` | Word timings for captions (Groq, or local faster-whisper) |
+| `mcp-server/`, `src/render-engine.mjs` | MCP server for Claude Desktop (older renderer) |
 
 ## License
 

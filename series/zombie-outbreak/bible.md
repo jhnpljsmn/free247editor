@@ -15,6 +15,9 @@ Tense but warm. Practical survival choices (water, food, shelter, noise, light, 
 than gore. Small moments of humor, mostly from Jun and Lola Cora. No graphic violence: zombies
 fall down, nothing more.
 
+Language: **plain English only** in all narration, for a worldwide audience. Names of people and
+places stay as they are (Lola Cora, Tondo, jeepney), but no Tagalog or Taglish words or phrases.
+
 ## Survival rules of this world
 
 1. Infection spreads by bite. Turning takes a few hours.

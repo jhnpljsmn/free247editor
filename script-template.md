@@ -9,7 +9,9 @@
 - One episode = **5 days**, about **2–3 minutes**, roughly **20–30 scenes**.
 - Every day starts with a **day card** scene (`**Card:** DAY 6 | Sampaloc, Manila`).
 - Scenes are short: **3–8 seconds**, 1–2 sentences of narration each.
-- Narration is **English**, third person, simple and punchy. It is voiced in ElevenLabs, one MP3 per scene.
+- Narration is **plain English only**, third person, simple and punchy, for a worldwide audience. No Tagalog
+  or Taglish words or phrases in narration (character and place names are fine). It is voiced in ElevenLabs,
+  one MP3 per scene.
 - Only use the characters, locations, poses, props and verbs listed here.
 
 ## Episode header (before Scene 1)
@@ -78,8 +80,9 @@ Keep characters at least ~150 px apart. Put the main character near x 300–700.
 | Zombie | Normal infected: slow, shambling. |
 | Runner | Fast infected: runs. Only from Day 4 onward. |
 
-Character line options: `facing: left|right`, `pose: <pose>`, `scale: 0.8` (smaller = farther
-away), `holding: bat|pipe|crowbar|knife|bolo|spear|pan|flashlight|none`.
+Character line options: `facing: left|right`, `pose: <pose>`, `expression: <expression>`,
+`scale: 0.8` (smaller = farther away), `holding: bat|pipe|crowbar|knife|bolo|spear|pan|flashlight|none`
+(only for characters without sprite images; in a sprite, what they hold is part of the picture).
 **Crowds:** `Zombie x6 @ (700, 1660) spread: 500` makes 6 zombies spread over 500 px. In
 actions, `Zombies` moves all of them and `Zombie 2` moves one.
 
@@ -96,10 +99,16 @@ actions, `Zombies` moves all of them and `Zombie 2` moves one.
 | fall down (stays down) | `3.4 Zombie 1 fall` |
 | pose | `2.0 Lola Cora point` or `2.0 Jun scared for 1.5` |
 | appear / disappear | `1.0 Runner appear` |
+| change expression | `2.0 Jun expression angry` (stays until changed) |
 
 **Poses:** idle, walk, run, sneak, crouch (or hide), sit, scared, point, wave, talk, think, look,
 hold, aim, push, hurt, cheer, swing (or attack), fall, lie (or dead), eat (zombies feeding),
 zidle (zombie standing).
+
+**Expressions:** neutral, happy, scared, angry, sad, surprised, determined. Zombies have no
+expressions. Without one, a pose picks its own (scared → scared, swing → determined, cheer → happy,
+hurt → sad), otherwise neutral. Each new pose + expression pair can need a new character image,
+so reuse the same few pairs where the story allows.
 
 **Camera:** `2.0 Camera shake`, `2.0 Camera flash red` (or `white`), `3.0 Camera zoom 1.3 in 1.5 on Ana`,
 `5.0 Camera fade out`.
@@ -110,7 +119,10 @@ zidle (zombie standing).
 `bridge`, `hospital`, `evac` (evacuation center), `outskirts` (fields/trees outside the city),
 `black` (empty dark).
 **Time:** dawn, day, dusk, night. **Weather:** clear, rain.
-Optional custom image instead: `**Background:** backgrounds/my-picture.png`.
+A new location is allowed (for example `**Location:** church`): it then needs an image,
+`shared-assets/backgrounds/church.png` (or `church-night.png` for one time of day), which is
+reused in later episodes. Prefer the drawn locations above, and use a new one only when the story needs it.
+Optional custom image for one scene: `**Background:** backgrounds/my-picture.png`.
 
 ## Props
 
