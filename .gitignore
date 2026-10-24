@@ -1,18 +1,12 @@
-# Installed by setup.mjs on each computer
-kit/
 node_modules/
 .cache/
 
 # Your footage, renders, style, rules, and keys stay local
 .env
-inbox/*
 outbox/*
 my-sounds/*
-!inbox/.gitkeep
 !outbox/.gitkeep
 !my-sounds/.gitkeep
-my-style.md
-my-rules.md
 *.transcribe.mp3
 
 # Project renders (keep structure, ignore large files)

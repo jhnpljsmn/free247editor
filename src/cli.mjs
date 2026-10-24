@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 import { createProject, loadProject, deleteProject, listProjects, getProjectDirs, saveProject } from './project.mjs';
 import { syncRegistry } from './asset-registry.mjs';
-import { parseEpisodeFile, interactiveScriptBuilder } from './script-parser.mjs';
-import { generateScenePlan, loadScenePlan } from './scene-planner.mjs';
+import { parseEpisodeFile } from './script-parser.mjs';
 import { renderScene, renderEpisode } from './stick/renderer.mjs';
 import { renderCastSheet } from './stick/castsheet.mjs';
 import { checkProject, writeVoiceLines } from './check.mjs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { existsSync, readdirSync, writeFileSync, copyFileSync, mkdirSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync, copyFileSync, mkdirSync } from 'node:fs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const flag = (name) => args.includes(name);
@@ -35,8 +34,6 @@ Commands:
          [--scenes scene-02,scene-05] [--force] [--no-transcribe]
   render-scene <project-id> <scene-id> [--quality <q>]       Render a single scene
   cast-sheet                                                 Draw the character worksheet PNG
-  build-scenes <project-id>                                  Interactive scene builder
-  plan <project-id>                                          Generate/update scene plan
   status <project-id>                                        Show project status
   help                                                       Show this help
 
@@ -146,32 +143,6 @@ async function main() {
         break;
       }
 
-      case 'build-scenes': {
-        const projectId = args[0];
-        const project = loadProject(projectId);
-        const dirs = getProjectDirs(projectId);
-        const scenes = await interactiveScriptBuilder(projectId, dirs);
-
-        project.scenes = scenes.map(s => s.id);
-        project.updated = new Date().toISOString();
-        saveProject(project);
-
-        console.log(`\nCreated ${scenes.length} scenes.`);
-        console.log(`Next: Run "node src/cli.mjs plan ${projectId}" to generate the scene plan.`);
-        break;
-      }
-
-      case 'plan': {
-        const projectId = args[0];
-        const project = loadProject(projectId);
-        const plan = await generateScenePlan(project);
-        console.log(`Scene plan generated.`);
-        console.log(`Total duration: ${plan.totalDuration.toFixed(1)}s`);
-        console.log(`Scenes: ${plan.scenes.length}`);
-        console.log(`Assets used: ${Object.keys(plan.assetUsage).length}`);
-        break;
-      }
-
       case 'render': {
         const projectId = args[0];
         const quality = option('--quality', 'preview');
@@ -208,8 +179,7 @@ async function main() {
           throw new Error(`Scene not found: ${sceneId}`);
         }
 
-        const fs = await import('node:fs');
-        const scene = JSON.parse(fs.readFileSync(scenePath, 'utf8'));
+        const scene = JSON.parse(readFileSync(scenePath, 'utf8'));
         const outputPath = join(quality === 'final' ? dirs.final : dirs.preview, `${sceneId}.mp4`);
 
         const r = await renderScene(scene, project, dirs, { quality, outputPath, force: true, transcribe: !flag('--no-transcribe') });
@@ -218,22 +188,15 @@ async function main() {
       }
 
       case 'status': {
-        const projectId = args[0];
-        const project = loadProject(projectId);
-        const dirs = getProjectDirs(projectId);
-        const plan = loadScenePlan(projectId);
+        const project = loadProject(args[0]);
+        const outbox = join(root, 'outbox');
+        const drafts = existsSync(outbox) ? readdirSync(outbox).filter((f) => f.startsWith(`${project.id}-v`)) : [];
 
         console.log(`\nProject: ${project.name} (${project.id})`);
         console.log(`Format: ${project.format} (${project.resolution.width}x${project.resolution.height} @ ${project.fps}fps)`);
         console.log(`Scenes: ${project.scenes?.length || 0}`);
-        console.log(`Total Duration: ${plan?.totalDuration?.toFixed(1) || 'N/A'}s`);
-
-        const fs = await import('node:fs');
-        const previewExists = existsSync(join(dirs.preview, `${project.id}-preview.mp4`));
-        const finalExists = existsSync(join(dirs.final, `${project.id}-final.mp4`));
-
-        console.log(`Preview Render: ${previewExists ? 'YES' : 'NO'}`);
-        console.log(`Final Render: ${finalExists ? 'YES' : 'NO'}`);
+        console.log(`Preview drafts: ${drafts.length}`);
+        console.log(`Final Render: ${existsSync(join(outbox, `${project.id}-final.mp4`)) ? 'YES' : 'NO'}`);
         break;
       }
 
