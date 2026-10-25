@@ -1,6 +1,0 @@
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-paul-jen/renders/preview/scene-01.mp4'
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-paul-jen/renders/preview/scene-02.mp4'
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-paul-jen/renders/preview/scene-03.mp4'
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-paul-jen/renders/preview/scene-04.mp4'
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-paul-jen/renders/preview/scene-05.mp4'
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-paul-jen/renders/preview/scene-06.mp4'
