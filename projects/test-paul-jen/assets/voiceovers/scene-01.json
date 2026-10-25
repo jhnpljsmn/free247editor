@@ -1,0 +1,46 @@
+{
+  "text": "Day 1, the city went quiet after midnight.",
+  "audio_duration_secs": 3.137143,
+  "words": [
+    {
+      "text": "Day",
+      "start": 0,
+      "end": 0.28
+    },
+    {
+      "text": "1,",
+      "start": 0.28,
+      "end": 0.9
+    },
+    {
+      "text": "the",
+      "start": 0.9,
+      "end": 1
+    },
+    {
+      "text": "city",
+      "start": 1,
+      "end": 1.28
+    },
+    {
+      "text": "went",
+      "start": 1.28,
+      "end": 1.58
+    },
+    {
+      "text": "quiet",
+      "start": 1.58,
+      "end": 1.98
+    },
+    {
+      "text": "after",
+      "start": 1.98,
+      "end": 2.32
+    },
+    {
+      "text": "midnight.",
+      "start": 2.32,
+      "end": 3.26
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Paul",
+  "role": "Main protagonist. Young adult man, calm under pressure.",
+  "look": "Tan skin, short black hair, thin mustache and goatee, green t-shirt, dark grey shorts, black-and-white sneakers, thin black stick arms and legs.",
+  "worksheet": "shared-assets/worksheets/paul.jpg",
+  "color": "#1a1a1a",
+  "shirt": "#2f7a3e",
+  "pants": "#3a3f44",
+  "headFill": "#c98d5f",
+  "height": 1,
+  "build": "normal",
+  "hair": "short",
+  "hairColor": "#141414",
+  "hat": "none",
+  "accessory": "none",
+  "weapon": "none"
+}

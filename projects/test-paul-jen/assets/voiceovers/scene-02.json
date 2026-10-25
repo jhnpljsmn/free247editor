@@ -1,0 +1,66 @@
+{
+  "text": "Paul and Jen were walking home when the streetlights began to flicker.",
+  "audio_duration_secs": 3.691973,
+  "words": [
+    {
+      "text": "Paul",
+      "start": 0,
+      "end": 0.22
+    },
+    {
+      "text": "and",
+      "start": 0.22,
+      "end": 0.42
+    },
+    {
+      "text": "Jen",
+      "start": 0.42,
+      "end": 0.56
+    },
+    {
+      "text": "were",
+      "start": 0.56,
+      "end": 0.72
+    },
+    {
+      "text": "walking",
+      "start": 0.72,
+      "end": 1.06
+    },
+    {
+      "text": "home",
+      "start": 1.06,
+      "end": 1.4
+    },
+    {
+      "text": "when",
+      "start": 1.4,
+      "end": 1.6
+    },
+    {
+      "text": "the",
+      "start": 1.6,
+      "end": 1.78
+    },
+    {
+      "text": "streetlights",
+      "start": 1.78,
+      "end": 2.38
+    },
+    {
+      "text": "began",
+      "start": 2.38,
+      "end": 2.78
+    },
+    {
+      "text": "to",
+      "start": 2.78,
+      "end": 3
+    },
+    {
+      "text": "flicker.",
+      "start": 3,
+      "end": 3.46
+    }
+  ]
+}

@@ -88,8 +88,8 @@ Each character has a sheet in `shared-assets/cast/<name>.json` (description, col
 folder of images in `shared-assets/cast/<name>/`, named `<pose>-<expression>.png`:
 
 - **Poses:** the list in `script-template.md` (idle, walk, run, scared, point, …).
-- **Expressions:** neutral, happy, scared, angry, sad, surprised, determined. Zombies use neutral only.
-- If an exact image is missing, the closest one is used (same pose with a neutral face, then standing).
+- **Expressions:** neutral, happy, scared, worried, angry, sad, surprised, determined. Zombies use neutral only.
+- If an exact image is missing, the closest one is used (same pose with another face, then standing).
   A character with no images yet is drawn by code from its sheet.
 - `node src/cli.mjs sync-assets` updates the asset list in `shared-assets/registry.json`.
 

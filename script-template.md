@@ -105,7 +105,7 @@ actions, `Zombies` moves all of them and `Zombie 2` moves one.
 hold, aim, push, hurt, cheer, swing (or attack), fall, lie (or dead), eat (zombies feeding),
 zidle (zombie standing).
 
-**Expressions:** neutral, happy, scared, angry, sad, surprised, determined. Zombies have no
+**Expressions:** neutral, happy, scared, worried, angry, sad, surprised, determined. Zombies have no
 expressions. Without one, a pose picks its own (scared → scared, swing → determined, cheer → happy,
 hurt → sad), otherwise neutral. Each new pose + expression pair can need a new character image,
 so reuse the same few pairs where the story allows.

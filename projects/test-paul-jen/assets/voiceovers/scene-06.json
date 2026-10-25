@@ -1,0 +1,36 @@
+{
+  "text": "Then, something knocked on the door.",
+  "audio_duration_secs": 2.182585,
+  "words": [
+    {
+      "text": "Then,",
+      "start": 0,
+      "end": 0.56
+    },
+    {
+      "text": "something",
+      "start": 0.56,
+      "end": 0.98
+    },
+    {
+      "text": "knocked",
+      "start": 0.98,
+      "end": 1.28
+    },
+    {
+      "text": "on",
+      "start": 1.28,
+      "end": 1.44
+    },
+    {
+      "text": "the",
+      "start": 1.44,
+      "end": 1.58
+    },
+    {
+      "text": "door.",
+      "start": 1.58,
+      "end": 2.38
+    }
+  ]
+}

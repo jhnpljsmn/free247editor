@@ -1,0 +1,51 @@
+{
+  "text": "Paul saw them first, he pointed, and they ran.",
+  "audio_duration_secs": 3.424943,
+  "words": [
+    {
+      "text": "Paul",
+      "start": 0,
+      "end": 0.24
+    },
+    {
+      "text": "saw",
+      "start": 0.24,
+      "end": 0.46
+    },
+    {
+      "text": "them",
+      "start": 0.46,
+      "end": 0.72
+    },
+    {
+      "text": "first,",
+      "start": 0.72,
+      "end": 1.58
+    },
+    {
+      "text": "he",
+      "start": 1.58,
+      "end": 1.7
+    },
+    {
+      "text": "pointed,",
+      "start": 1.7,
+      "end": 2.48
+    },
+    {
+      "text": "and",
+      "start": 2.48,
+      "end": 2.62
+    },
+    {
+      "text": "they",
+      "start": 2.62,
+      "end": 2.76
+    },
+    {
+      "text": "ran.",
+      "start": 2.76,
+      "end": 3.6
+    }
+  ]
+}

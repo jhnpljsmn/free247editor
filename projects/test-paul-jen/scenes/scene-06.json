@@ -1,0 +1,94 @@
+{
+  "id": "scene-06",
+  "title": "The Knock",
+  "duration": 0,
+  "day": 1,
+  "location": "house",
+  "time": "night",
+  "weather": "clear",
+  "background": {
+    "type": "color",
+    "asset": "#000000"
+  },
+  "characters": [
+    {
+      "name": "Paul",
+      "facing": 1,
+      "scale": 1,
+      "hidden": false,
+      "id": "paul",
+      "x": 360,
+      "y": 1650
+    },
+    {
+      "name": "Jen",
+      "facing": -1,
+      "scale": 1,
+      "hidden": false,
+      "id": "jen",
+      "x": 680,
+      "y": 1690
+    }
+  ],
+  "actions": [
+    {
+      "verb": "expression",
+      "expression": "surprised",
+      "time": 1.2,
+      "actor": "paul"
+    },
+    {
+      "verb": "face",
+      "dir": "right",
+      "time": 1.2,
+      "actor": "jen"
+    },
+    {
+      "verb": "move",
+      "gait": "run",
+      "x": 280,
+      "y": 1650,
+      "time": 2,
+      "actor": "paul",
+      "relative": true
+    }
+  ],
+  "camera": [
+    {
+      "time": 1,
+      "type": "shake",
+      "strength": 1
+    },
+    {
+      "time": 3.6,
+      "type": "fade",
+      "direction": "out",
+      "duration": 0.6
+    }
+  ],
+  "props": [],
+  "narration": {
+    "text": "Then, something knocked on the door."
+  },
+  "soundEffects": [
+    {
+      "asset": "sounds/door-knock.mp3",
+      "startTime": 0.9,
+      "volume": 1
+    }
+  ],
+  "music": null,
+  "subtitle": {
+    "text": "Then, something knocked on the door.",
+    "startTime": 0,
+    "endTime": 0,
+    "style": "default"
+  },
+  "transitions": {
+    "in": "cut",
+    "out": "cut",
+    "duration": 0.5
+  },
+  "card": null,
+  "warnings": []
+}

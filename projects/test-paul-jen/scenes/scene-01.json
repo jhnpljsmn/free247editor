@@ -1,0 +1,38 @@
+{
+  "id": "scene-01",
+  "title": "Day 1",
+  "duration": 0,
+  "day": 1,
+  "location": null,
+  "time": "night",
+  "weather": "clear",
+  "background": {
+    "type": "color",
+    "asset": "#000000"
+  },
+  "characters": [],
+  "actions": [],
+  "camera": [],
+  "props": [],
+  "narration": {
+    "text": "Day one. The city went quiet after midnight."
+  },
+  "soundEffects": [],
+  "music": null,
+  "subtitle": {
+    "text": "Day one. The city went quiet after midnight.",
+    "startTime": 0,
+    "endTime": 0,
+    "style": "default"
+  },
+  "transitions": {
+    "in": "cut",
+    "out": "cut",
+    "duration": 0.5
+  },
+  "card": {
+    "title": "DAY 1",
+    "subtitle": "Manila"
+  },
+  "warnings": []
+}

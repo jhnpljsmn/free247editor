@@ -1,0 +1,30 @@
+{
+  "id": "test-paul-jen",
+  "name": "Zombie Outbreak: Test Episode (Paul & Jen)",
+  "description": "",
+  "created": "2026-10-25T05:26:47.239Z",
+  "updated": "2026-10-25T05:27:02.140Z",
+  "format": "vertical",
+  "resolution": {
+    "width": 1080,
+    "height": 1920
+  },
+  "fps": 30,
+  "scenes": [
+    "scene-01",
+    "scene-02",
+    "scene-03",
+    "scene-04",
+    "scene-05",
+    "scene-06"
+  ],
+  "assets": {
+    "characters": [],
+    "backgrounds": [],
+    "sounds": []
+  },
+  "music": {
+    "asset": "sounds/tension.mp3",
+    "volume": 0.25
+  }
+}

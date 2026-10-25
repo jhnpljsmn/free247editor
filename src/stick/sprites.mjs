@@ -6,9 +6,9 @@ import { existsSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { SHARED_CAST_DIR } from './cast.mjs';
 
-export const EXPRESSIONS = ['neutral', 'happy', 'scared', 'angry', 'sad', 'surprised', 'determined'];
+export const EXPRESSIONS = ['neutral', 'happy', 'scared', 'worried', 'angry', 'sad', 'surprised', 'determined'];
 // Expression a pose implies when the script doesn't give one.
-const POSE_EXPRESSION = { scared: 'scared', hurt: 'sad', cheer: 'happy', wave: 'happy', swing: 'determined', aim: 'determined', push: 'determined', fall: 'surprised' };
+const POSE_EXPRESSION = { scared: 'scared', run: 'scared', point: 'determined', look: 'worried', hurt: 'sad', cheer: 'happy', wave: 'happy', swing: 'determined', aim: 'determined', push: 'determined', fall: 'surprised' };
 // Sprite height relative to a standing figure, for poses that are lower than standing.
 const POSE_HEIGHT = { crouch: 0.62, sneak: 0.8, sit: 0.68, lie: 0.3, fall: 0.55, eat: 0.62 };
 
@@ -30,11 +30,12 @@ export function expressionFor(sheet, pose, expression) {
   return expression || POSE_EXPRESSION[pose] || 'neutral';
 }
 
-/** Best available sprite for a pose/expression: exact, same pose neutral, then standing. */
+/** Best available sprite for a pose/expression: exact, same pose neutral, same pose any face, then standing. */
 export function pickSprite(sheet, pose, expression, names = spriteNames(sheet)) {
   const expr = expressionFor(sheet, pose, expression);
   const stand = sheet.zombie ? ['zidle', 'idle'] : ['idle'];
-  const tries = [`${pose}-${expr}`, `${pose}-neutral`, ...stand.flatMap((p) => [`${p}-${expr}`, `${p}-neutral`])];
+  const samePose = names.filter((n) => n.startsWith(`${pose}-`)).sort();
+  const tries = [`${pose}-${expr}`, `${pose}-neutral`, ...samePose, ...stand.flatMap((p) => [`${p}-${expr}`, `${p}-neutral`])];
   const found = tries.find((n) => names.includes(n));
   return found ? { name: found, exact: found === tries[0], wanted: tries[0] } : { name: null, exact: false, wanted: tries[0] };
 }

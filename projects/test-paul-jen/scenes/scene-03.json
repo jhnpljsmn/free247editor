@@ -1,0 +1,112 @@
+{
+  "id": "scene-03",
+  "title": "Something Moves",
+  "duration": 0,
+  "day": 1,
+  "location": "alley",
+  "time": "night",
+  "weather": "clear",
+  "background": {
+    "type": "color",
+    "asset": "#000000"
+  },
+  "characters": [
+    {
+      "name": "Paul",
+      "facing": 1,
+      "scale": 1,
+      "hidden": false,
+      "id": "paul",
+      "x": 330,
+      "y": 1650
+    },
+    {
+      "name": "Jen",
+      "facing": 1,
+      "pose": "hold",
+      "scale": 1,
+      "hidden": false,
+      "id": "jen",
+      "x": 560,
+      "y": 1690
+    },
+    {
+      "name": "Zombie",
+      "facing": 1,
+      "scale": 1,
+      "hidden": false,
+      "id": "zombie-1",
+      "group": "zombie",
+      "x": 1140,
+      "y": 1640
+    },
+    {
+      "name": "Zombie",
+      "facing": 1,
+      "scale": 1,
+      "hidden": false,
+      "id": "zombie-2",
+      "group": "zombie",
+      "x": 1360,
+      "y": 1680
+    }
+  ],
+  "actions": [
+    {
+      "verb": "move",
+      "gait": "shamble",
+      "x": 920,
+      "y": 1660,
+      "duration": 4,
+      "time": 0.8,
+      "actor": "zombie-1"
+    },
+    {
+      "verb": "move",
+      "gait": "shamble",
+      "x": 1140,
+      "y": 1700,
+      "duration": 4,
+      "time": 0.9500000000000001,
+      "actor": "zombie-2"
+    },
+    {
+      "verb": "pose",
+      "pose": "look",
+      "time": 2.5,
+      "actor": "paul"
+    },
+    {
+      "verb": "expression",
+      "expression": "worried",
+      "time": 2.5,
+      "actor": "paul"
+    }
+  ],
+  "camera": [],
+  "props": [],
+  "narration": {
+    "text": "Jen raised her flashlight. At the end of the alley, something was moving toward them."
+  },
+  "soundEffects": [
+    {
+      "asset": "sounds/zombie-groan.mp3",
+      "startTime": 1.2,
+      "volume": 1
+    }
+  ],
+  "music": null,
+  "subtitle": {
+    "text": "Jen raised her flashlight. At the end of the alley, something was moving toward them.",
+    "startTime": 0,
+    "endTime": 0,
+    "style": "default"
+  },
+  "transitions": {
+    "in": "cut",
+    "out": "cut",
+    "duration": 0.5
+  },
+  "card": null,
+  "warnings": []
+}

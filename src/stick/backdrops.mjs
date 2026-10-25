@@ -191,7 +191,7 @@ const DRAW = {
     ctx.save();
     ctx.translate(w * 0.12, G - 480);
     ctx.rotate(-0.08);
-    ctx.fillText('TULONG!', 0, 0);
+    ctx.fillText('HELP!', 0, 0);
     ctx.restore();
     ctx.fillStyle = '#2f3138';
     ctx.fillRect(w * 0.85, h * 0.22, 26, G - h * 0.22);

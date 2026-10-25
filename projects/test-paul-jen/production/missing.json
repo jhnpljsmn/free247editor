@@ -1,0 +1,93 @@
+{
+  "sprites": [
+    {
+      "character": "Zombie",
+      "id": "zombie",
+      "file": "shared-assets/cast/zombie/zidle-neutral.png",
+      "look": "zidle-neutral",
+      "scenes": [
+        "scene-03",
+        "scene-04"
+      ],
+      "hasSprites": false
+    },
+    {
+      "character": "Zombie",
+      "id": "zombie",
+      "file": "shared-assets/cast/zombie/shamble-neutral.png",
+      "look": "shamble-neutral",
+      "scenes": [
+        "scene-03",
+        "scene-04"
+      ],
+      "hasSprites": false
+    }
+  ],
+  "approximated": [
+    {
+      "character": "Paul",
+      "id": "paul",
+      "file": "shared-assets/cast/paul/point-neutral.png",
+      "look": "point-neutral",
+      "scenes": [
+        "scene-04"
+      ],
+      "hasSprites": true,
+      "using": "point-angry"
+    },
+    {
+      "character": "Paul",
+      "id": "paul",
+      "file": "shared-assets/cast/paul/run-neutral.png",
+      "look": "run-neutral",
+      "scenes": [
+        "scene-04",
+        "scene-05"
+      ],
+      "hasSprites": true,
+      "using": "run-scared"
+    },
+    {
+      "character": "Paul",
+      "id": "paul",
+      "file": "shared-assets/cast/paul/idle-surprised.png",
+      "look": "idle-surprised",
+      "scenes": [
+        "scene-06"
+      ],
+      "hasSprites": true,
+      "using": "idle-neutral"
+    },
+    {
+      "character": "Paul",
+      "id": "paul",
+      "file": "shared-assets/cast/paul/run-surprised.png",
+      "look": "run-surprised",
+      "scenes": [
+        "scene-06"
+      ],
+      "hasSprites": true,
+      "using": "run-scared"
+    },
+    {
+      "character": "Jen",
+      "id": "jen",
+      "file": "shared-assets/cast/jen/run-neutral.png",
+      "look": "run-neutral",
+      "scenes": [
+        "scene-04"
+      ],
+      "hasSprites": true,
+      "using": "run-scared"
+    }
+  ],
+  "backgrounds": [],
+  "files": [
+    "assets/voiceovers/scene-01.mp3",
+    "assets/voiceovers/scene-02.mp3",
+    "assets/voiceovers/scene-03.mp3",
+    "assets/voiceovers/scene-04.mp3",
+    "assets/voiceovers/scene-05.mp3",
+    "assets/voiceovers/scene-06.mp3"
+  ]
+}

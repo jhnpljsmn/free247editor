@@ -1,0 +1,126 @@
+{
+  "id": "scene-04",
+  "title": "Run",
+  "duration": 0,
+  "day": 1,
+  "location": "alley",
+  "time": "night",
+  "weather": "clear",
+  "background": {
+    "type": "color",
+    "asset": "#000000"
+  },
+  "characters": [
+    {
+      "name": "Paul",
+      "facing": 1,
+      "pose": "point",
+      "scale": 1,
+      "hidden": false,
+      "id": "paul",
+      "x": 420,
+      "y": 1650
+    },
+    {
+      "name": "Jen",
+      "facing": 1,
+      "pose": "hold",
+      "scale": 1,
+      "hidden": false,
+      "id": "jen",
+      "x": 620,
+      "y": 1690
+    },
+    {
+      "name": "Zombie",
+      "facing": 1,
+      "scale": 1,
+      "hidden": false,
+      "id": "zombie-1",
+      "group": "zombie",
+      "x": 790,
+      "y": 1640
+    },
+    {
+      "name": "Zombie",
+      "facing": 1,
+      "scale": 1,
+      "hidden": false,
+      "id": "zombie-2",
+      "group": "zombie",
+      "x": 1010,
+      "y": 1680
+    }
+  ],
+  "actions": [
+    {
+      "verb": "move",
+      "gait": "shamble",
+      "x": 760,
+      "y": 1660,
+      "duration": 3,
+      "time": 0.3,
+      "actor": "zombie-1"
+    },
+    {
+      "verb": "move",
+      "gait": "shamble",
+      "x": 980,
+      "y": 1700,
+      "duration": 3,
+      "time": 0.44999999999999996,
+      "actor": "zombie-2"
+    },
+    {
+      "verb": "exit",
+      "dir": "left",
+      "gait": "run",
+      "time": 2,
+      "actor": "jen"
+    },
+    {
+      "verb": "exit",
+      "dir": "left",
+      "gait": "run",
+      "time": 2.2,
+      "actor": "paul"
+    }
+  ],
+  "camera": [
+    {
+      "time": 1.8,
+      "type": "shake",
+      "strength": 1
+    }
+  ],
+  "props": [],
+  "narration": {
+    "text": "Paul saw them first. He pointed, and they ran."
+  },
+  "soundEffects": [
+    {
+      "asset": "sounds/zombie-groan.mp3",
+      "startTime": 0.4,
+      "volume": 1
+    },
+    {
+      "asset": "sounds/footsteps.mp3",
+      "startTime": 2,
+      "volume": 1
+    }
+  ],
+  "music": null,
+  "subtitle": {
+    "text": "Paul saw them first. He pointed, and they ran.",
+    "startTime": 0,
+    "endTime": 0,
+    "style": "default"
+  },
+  "transitions": {
+    "in": "cut",
+    "out": "cut",
+    "duration": 0.5
+  },
+  "card": null,
+  "warnings": []
+}
