@@ -1,28 +1,21 @@
-// Word-by-word captions drawn on the canvas, timed from a transcript of the scene's voiceover.
-import { FONT } from './text.mjs';
-import { fitFont } from './effects.mjs';
+// Word-by-word captions drawn on the canvas, timed from the narration transcript.
+import { GlobalFonts } from '@napi-rs/canvas';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const FONT = 'Anton';
 const MAX_WORDS = 3;
 
-/**
- * Build caption chunks from script text and optional word timings.
- * words: [{ text, start, end }] from tools/transcribe.mjs (times relative to the voiceover).
- * offset: when the voiceover starts in the scene. span: fallback length when there are no timings.
- */
-export function buildCaptions(text, words, offset, span) {
-  const scriptWords = (text || '').split(/\s+/).filter(Boolean);
-  let timed;
-  if (words?.length) {
-    // Prefer the script's spelling when the transcript has the same number of words.
-    const useScript = scriptWords.length === words.length;
-    timed = words.map((w, i) => ({ text: useScript ? scriptWords[i] : w.text, start: w.start + offset, end: w.end + offset }));
-  } else {
-    if (!scriptWords.length) return [];
-    const per = span / scriptWords.length;
-    timed = scriptWords.map((w, i) => ({ text: w, start: offset + i * per, end: offset + (i + 1) * per }));
-  }
+let registered = false;
+export function registerFonts() {
+  if (registered) return;
+  GlobalFonts.registerFromPath(join(root, 'shared-assets', 'fonts', 'Anton-Regular.ttf'), FONT);
+  registered = true;
+}
 
-  // Group into short chunks, breaking after punctuation or long pauses.
+/** Group timed words [{ text, start, end }] into short chunks, breaking after punctuation or long pauses. */
+export function buildCaptions(timed) {
   const chunks = [];
   let cur = [];
   for (let i = 0; i < timed.length; i++) {
@@ -38,11 +31,17 @@ export function buildCaptions(text, words, offset, span) {
   return chunks;
 }
 
-export function drawCaptions(ctx, chunks, t, w, h, yFrac = 0.3) {
+function fitFont(ctx, text, maxW, size) {
+  ctx.font = `${size}px ${FONT}`;
+  const tw = ctx.measureText(text).width;
+  return tw > maxW ? Math.floor(size * maxW / tw) : size;
+}
+
+export function drawCaptions(ctx, chunks, t, w, h, yFrac) {
   const chunk = chunks.find((c) => t >= c.start && t < c.end);
   if (!chunk) return;
   const words = chunk.words.map((x) => x.text.toUpperCase());
-  const size = fitFont(ctx, words.join(' '), w * 0.88, 104);
+  const size = fitFont(ctx, words.join(' '), w * 0.88, 84);
   ctx.font = `${size}px ${FONT}`;
   const space = ctx.measureText(' ').width;
   const widths = words.map((x) => ctx.measureText(x).width);

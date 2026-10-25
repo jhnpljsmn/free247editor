@@ -4,14 +4,9 @@ node_modules/
 # Your footage, renders, style, rules, and keys stay local
 .env
 outbox/*
-my-sounds/*
 !outbox/.gitkeep
-!my-sounds/.gitkeep
 *.transcribe.mp3
 
-# Project renders (keep structure, ignore large files)
-projects/*/renders/**/*.mp4
-projects/*/renders/**/*.mov
 
 # Sync tools
 *.sync-conflict-*
@@ -21,3 +16,7 @@ projects/*/renders/**/*.mov
 .DS_Store
 Thumbs.db
 __pycache__/
+
+# Episodes (scripts, images, voiceovers) stay local
+projects/*
+!projects/.gitkeep

@@ -1,230 +1,76 @@
 #!/usr/bin/env node
-import { createProject, loadProject, deleteProject, listProjects, getProjectDirs, saveProject } from './project.mjs';
-import { syncRegistry } from './asset-registry.mjs';
-import { parseEpisodeFile } from './script-parser.mjs';
-import { renderScene, renderEpisode } from './stick/renderer.mjs';
-import { renderCastSheet } from './stick/castsheet.mjs';
-import { checkProject, writeVoiceLines, validateVideo } from './check.mjs';
-import { collectAssets, planAssets } from './production.mjs';
+import { existsSync, mkdirSync, readdirSync, rmSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { existsSync, readdirSync, readFileSync, writeFileSync, copyFileSync, mkdirSync } from 'node:fs';
 
+// Apps launched outside a terminal (Claude Desktop, editors) often lack Homebrew on PATH.
+for (const dir of ['/opt/homebrew/bin', '/usr/local/bin']) {
+  if (existsSync(dir) && !(process.env.PATH || '').split(':').includes(dir)) {
+    process.env.PATH = `${dir}:${process.env.PATH || ''}`;
+  }
+}
+
+const { assembleEpisode, checkEpisode } = await import('./assemble.mjs');
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const projects = join(root, 'projects');
+const [command, ep] = process.argv.slice(2);
+const args = process.argv.slice(3);
 const flag = (name) => args.includes(name);
 const option = (name, fallback) => (args.indexOf(name) >= 0 ? args[args.indexOf(name) + 1] : fallback);
 
-const command = process.argv[2];
-const args = process.argv.slice(3);
-
 function printUsage() {
   console.log(`
-free247editor Automation Engine CLI
+Doommates episode assembler
 
 Usage: node src/cli.mjs <command> [options]
 
 Commands:
-  create-project <id> [--name <name>] [--format <format>]    Create a new project
-  list-projects                                              List all projects
-  delete-project <id>                                        Delete a project
-  sync-assets                                                Sync shared asset registry
-  import-script <project-id> [script.md]                     Import a script (default: projects/<id>/script.md)
-  voice-lines <project-id>                                   Write voiceover-lines.txt for ElevenLabs
-  plan-assets <project-id>                                   Write production/asset-checklist.md (reused vs missing assets)
-  check <project-id>                                         Report script problems and missing files
-  render <project-id> [--quality <preview|final>]            Render the episode to outbox/
-         [--scenes scene-02,scene-05] [--force] [--no-transcribe]
-  render-scene <project-id> <scene-id> [--quality <q>]       Render a single scene
-  cast-sheet                                                 Draw the character worksheet PNG
-  status <project-id>                                        Show project status
-  help                                                       Show this help
-
-Examples:
-  node src/cli.mjs create-project zombie-in-manila --format vertical
-  node src/cli.mjs import-script manila-ep01
-  node src/cli.mjs check manila-ep01
-  node src/cli.mjs render manila-ep01 --quality final
+  create-project <ep>                            Make projects/<ep>/ (scenes/, production/)
+  list-projects                                  List episodes
+  delete-project <ep>                            Delete an episode folder
+  check <ep>                                     List missing images, narration or voiceover.mp3
+  assemble <ep> [--wide] [--quality final]       Build outbox/<ep>-vN.mp4 (9:16; --wide for 16:9)
 `);
 }
 
-async function main() {
-  try {
-    switch (command) {
-      case 'create-project': {
-        const id = args[0];
-        const nameIndex = args.indexOf('--name');
-        const name = nameIndex >= 0 ? args[nameIndex + 1] : undefined;
-        const formatIndex = args.indexOf('--format');
-        const format = formatIndex >= 0 ? args[formatIndex + 1] : 'vertical';
-
-        const project = createProject(id, { name, format });
-        console.log(`Created project: ${project.name} (${project.id})`);
-        console.log(`Format: ${project.format} (${project.resolution.width}x${project.resolution.height})`);
-        console.log(`Location: projects/${project.id}/`);
-        break;
-      }
-
-      case 'list-projects': {
-        const projects = listProjects();
-        if (projects.length === 0) {
-          console.log('No projects found.');
-          break;
-        }
-        console.log('\nProjects:');
-        for (const p of projects) {
-          const status = p.incomplete ? ' (incomplete)' : '';
-          const scenes = p.scenes?.length || 0;
-          console.log(`  ${p.id}${status} - ${p.name} (${p.format}, ${scenes} scenes)`);
-        }
-        break;
-      }
-
-      case 'delete-project': {
-        const id = args[0];
-        deleteProject(id);
-        console.log(`Deleted project: ${id}`);
-        break;
-      }
-
-      case 'sync-assets': {
-        const registry = syncRegistry();
-        const counts = {};
-        for (const [type, assets] of Object.entries(registry.assets)) {
-          counts[type] = Object.keys(assets).length;
-        }
-        console.log('Asset registry synced.');
-        console.log('Counts:', counts);
-        break;
-      }
-
-      case 'import-script': {
-        const projectId = args[0];
-        const project = loadProject(projectId);
-        const dirs = getProjectDirs(projectId);
-        const scriptPath = args[1] && !args[1].startsWith('--') ? args[1] : join(dirs.root, 'script.md');
-
-        const { meta, scenes } = await parseEpisodeFile(scriptPath);
-        mkdirSync(dirs.scenes, { recursive: true });
-        for (const f of readdirSync(dirs.scenes)) {
-          if (/^scene-\d+\.json$/.test(f) && !scenes.some((s) => `${s.id}.json` === f)) {
-            (await import('node:fs')).rmSync(join(dirs.scenes, f));
-          }
-        }
-        for (const scene of scenes) {
-          writeFileSync(join(dirs.scenes, `${scene.id}.json`), JSON.stringify(scene, null, 2));
-        }
-
-        project.scenes = scenes.map(s => s.id);
-        if (meta.title) project.name = meta.title;
-        project.music = meta.music;
-        saveProject(project);
-
-        const warnings = scenes.reduce((n, s) => n + s.warnings.length, 0);
-        console.log(`Imported ${scenes.length} scenes${warnings ? `, ${warnings} warning(s) — run check` : ''}.`);
-        break;
-      }
-
-      case 'voice-lines': {
-        const project = loadProject(args[0]);
-        const { path, count } = writeVoiceLines(project, getProjectDirs(args[0]));
-        console.log(`Wrote ${count} voiceover lines to ${path}`);
-        break;
-      }
-
-      case 'check': {
-        const project = loadProject(args[0]);
-        const dirs = getProjectDirs(args[0]);
-        const { problems, missingVoice } = checkProject(project, dirs);
-        const { missing } = collectAssets(project, dirs);
-        for (const p of problems) console.log(`- ${p}`);
-        if (missingVoice.length) console.log(`- missing voiceovers (${missingVoice.length}): ${missingVoice.map((v) => v.split('/').pop()).join(', ')}`);
-        for (const s of missing.sprites) console.log(`- missing sprite ${s.file}${s.hasSprites ? '' : ' (drawn by code until added)'}`);
-        for (const b of missing.backgrounds) console.log(`- missing background ${b.file}`);
-        if (missing.approximated.length) console.log(`  (${missing.approximated.length} looks use a close sprite; see plan-assets)`);
-        if (!problems.length && !missingVoice.length && !missing.sprites.length && !missing.backgrounds.length) console.log('All good. Ready to render.');
-        break;
-      }
-
-      case 'plan-assets': {
-        const project = loadProject(args[0]);
-        const { dir, missing } = planAssets(project, getProjectDirs(args[0]));
-        console.log(`Wrote ${dir}/asset-checklist.md and missing.json`);
-        console.log(`Missing: ${missing.sprites.length} sprites, ${missing.backgrounds.length} backgrounds, ${missing.files.length} audio files; ${missing.approximated.length} looks use a close sprite`);
-        break;
-      }
-
-      case 'cast-sheet': {
-        console.log(`Cast sheet: ${renderCastSheet()}`);
-        break;
-      }
-
-      case 'render': {
-        const projectId = args[0];
-        const quality = option('--quality', 'preview');
-        const project = loadProject(projectId);
-        const dirs = getProjectDirs(projectId);
-        const only = option('--scenes', null)?.split(',');
-
-        console.log(`Rendering ${project.name} (${quality})`);
-        const started = Date.now();
-        const { path, duration } = await renderEpisode(project, dirs, { quality, only, force: flag('--force'), transcribe: !flag('--no-transcribe') });
-
-        const outbox = join(root, 'outbox');
-        mkdirSync(outbox, { recursive: true });
-        let out = join(outbox, `${projectId}-final.mp4`);
-        if (quality !== 'final') {
-          let v = 1;
-          while (existsSync(join(outbox, `${projectId}-v${v}.mp4`))) v++;
-          out = join(outbox, `${projectId}-v${v}.mp4`);
-        }
-        copyFileSync(path, out);
-        for (const p of validateVideo(out, duration, project.resolution)) console.log(`WARNING: ${p}`);
-        console.log(`Done: ${out} (${duration.toFixed(1)}s video, rendered in ${((Date.now() - started) / 1000).toFixed(0)}s)`);
-        break;
-      }
-
-      case 'render-scene': {
-        const projectId = args[0];
-        const sceneId = args[1];
-        const quality = option('--quality', 'preview');
-        const project = loadProject(projectId);
-        const dirs = getProjectDirs(projectId);
-        const scenePath = join(dirs.scenes, `${sceneId}.json`);
-
-        if (!existsSync(scenePath)) {
-          throw new Error(`Scene not found: ${sceneId}`);
-        }
-
-        const scene = JSON.parse(readFileSync(scenePath, 'utf8'));
-        const outputPath = join(quality === 'final' ? dirs.final : dirs.preview, `${sceneId}.mp4`);
-
-        const r = await renderScene(scene, project, dirs, { quality, outputPath, force: true, transcribe: !flag('--no-transcribe') });
-        console.log(`Output: ${outputPath} (${r.duration.toFixed(1)}s)`);
-        break;
-      }
-
-      case 'status': {
-        const project = loadProject(args[0]);
-        const outbox = join(root, 'outbox');
-        const drafts = existsSync(outbox) ? readdirSync(outbox).filter((f) => f.startsWith(`${project.id}-v`)) : [];
-
-        console.log(`\nProject: ${project.name} (${project.id})`);
-        console.log(`Format: ${project.format} (${project.resolution.width}x${project.resolution.height} @ ${project.fps}fps)`);
-        console.log(`Scenes: ${project.scenes?.length || 0}`);
-        console.log(`Preview drafts: ${drafts.length}`);
-        console.log(`Final Render: ${existsSync(join(outbox, `${project.id}-final.mp4`)) ? 'YES' : 'NO'}`);
-        break;
-      }
-
-      case 'help':
-      default:
-        printUsage();
-        break;
+try {
+  switch (command) {
+    case 'create-project': {
+      if (!ep || !/^[a-z0-9-]+$/.test(ep)) throw new Error('Episode id must be kebab-case, e.g. doommates-ep01');
+      for (const sub of ['scenes', 'production']) mkdirSync(join(projects, ep, sub), { recursive: true });
+      console.log(`Created projects/${ep}/`);
+      break;
     }
-  } catch (err) {
-    console.error(`Error: ${err.message}`);
-    process.exit(1);
+    case 'list-projects': {
+      const list = existsSync(projects) ? readdirSync(projects).filter((n) => statSync(join(projects, n)).isDirectory()) : [];
+      console.log(list.length ? list.join('\n') : 'No projects found.');
+      break;
+    }
+    case 'delete-project': {
+      if (!ep || !existsSync(join(projects, ep))) throw new Error(`Project "${ep}" not found`);
+      rmSync(join(projects, ep), { recursive: true, force: true });
+      console.log(`Deleted projects/${ep}/`);
+      break;
+    }
+    case 'check': {
+      const { scenes, problems } = checkEpisode(join(projects, ep));
+      console.log(`${scenes.length} scenes`);
+      console.log(problems.length ? problems.map((p) => `  - ${p}`).join('\n') : 'Ready to assemble.');
+      break;
+    }
+    case 'assemble': {
+      const r = await assembleEpisode(ep, { wide: flag('--wide'), quality: option('--quality', 'preview') });
+      for (const c of r.cuts) console.log(`  ${c.id}: ${c.start.toFixed(1)}s – ${c.end.toFixed(1)}s`);
+      console.log(`Transcript matched ${Math.round(r.matched * 100)}% of script words.`);
+      if (r.matched < 0.8) console.log('WARNING: low match; the voiceover may not follow the scenes.md narration.');
+      for (const p of r.problems) console.log(`WARNING: ${p}`);
+      console.log(`Output: ${r.outputPath} (${r.duration.toFixed(1)}s)`);
+      break;
+    }
+    default:
+      printUsage();
   }
+} catch (err) {
+  console.error(`Error: ${err.message}`);
+  process.exit(1);
 }
-
-main();

@@ -1,42 +1,38 @@
 # Google Flow style guide
 
-Every Flow prompt starts with one of the style blocks below, unchanged, so every image looks like
-part of the same series. Claude Code writes the prompts in `projects/<episode>/production/flow-prompts.md`.
+Every scene prompt starts with the style block below, unchanged, so every image looks like part of
+the same series. Claude Code writes the prompts in `projects/<ep>/production/scenes.md`.
 
-## Character sprites
+## Style block
 
-**Style block:**
+> Cinematic 2D cartoon illustration, vertical 9:16 composition. Stick-figure cartoon characters in the
+> same style as the reference images: big round heads, simple expressive faces, thick dark outlines,
+> flat colors with light cel shading, thin black stick arms and legs. Detailed, atmospheric
+> background with dramatic lighting. No text, no captions, no logos, no watermarks.
 
-> 2D cartoon character in the same style as the reference image: big round head about one third of
-> the body height, simple friendly face with clear eyes, eyebrows and mouth, thick dark outlines,
-> flat colors with light cel shading, loose t-shirt and shorts, thin black stick arms and legs,
-> black-and-white sneakers. Full body visible from head to feet, centered, turned toward the right.
-> Plain pure white background, no ground, no shadow, no text, no labels, no other objects.
+For 16:9 episodes, replace "vertical 9:16 composition" with "wide 16:9 composition".
 
-Always add the character's worksheet (`shared-assets/worksheets/<character>.jpg`) as a reference image.
+## Characters
 
-**Then add:** who it is (from `shared-assets/cast/<character>.json`: colors, hair, hat, accessory,
-what they hold), the pose, and the expression.
+Add the character reference images in Flow for every prompt that shows them, and describe them with
+these exact words:
 
-**Example:**
+- **Paul:** young man, tan skin, short black hair, thin mustache and goatee, green t-shirt, dark grey
+  shorts, black-and-white sneakers.
+- **Jen:** young woman, light tan skin, long straight black hair past the shoulders, purple t-shirt,
+  dark grey shorts, black-and-white sneakers.
+- **Zombies:** grey-green skin, torn office clothes, blank white eyes; threatening but not graphic.
+- **The woman in orange (S1E2):** woman in her thirties, medium brown skin, short black hair tied
+  back, orange maintenance jacket with a reflective stripe, dark work pants, black boots.
 
-> [style block] Character: Paul, young man with tan skin, short black hair, thin mustache and goatee,
-> green t-shirt, dark grey shorts. Pose: standing idle, arms relaxed. Expression: happy, wide smile.
+New character: add a line here the first time they appear.
 
-**Keep characters consistent:**
-1. Put the character's worksheet in Flow as a reference image for every prompt.
-2. One pose and one expression per image, full body. Faces alone can't be used as sprites.
-3. Save as `shared-assets/cast/<character>/<pose>-<expression>.png`, for example
-   `shared-assets/cast/paul/idle-happy.png`. The white background is removed automatically.
+## Prompt order
 
-## Backgrounds
+`[style block]` + shot (wide, medium, close-up, over-the-shoulder, low angle) + who is in it, with their
+pose and expression + place + time of day, weather and lighting + mood.
 
-**Style block:**
-
-> Flat 2D vector illustration background for a vertical 9:16 video, simple shapes, clean edges,
-> muted colors, no people, no characters, no text. The ground or floor fills the bottom 22% of the
-> image and is flat and empty, so characters can stand on it.
-
-**Then add:** the place, time of day (dawn, day, dusk, night), and weather.
-
-Save as `shared-assets/backgrounds/<location>.png`, or `<location>-<time>.png` for one time of day.
+- Keep the subject in the middle 60% of the frame. Captions sit in the lower third, and the camera
+  move crops the edges.
+- One clear moment per image. A still can't show an action happening over time, so pick its peak.
+- Same place in several scenes: repeat the same place description word for word.

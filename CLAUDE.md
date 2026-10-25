@@ -1,66 +1,74 @@
-# free247editor: Zombie Outbreak episode production
+# Doommates: episode production
 
-Vertical (1080×1920) episodes with static 2D stick-figure sprites, voiced in ElevenLabs.
-The user's step-by-step guide is `INSTRUCTIONS.md`; the script format is `script-template.md`;
-the story is `series/zombie-outbreak/bible.md`. Run everything from this folder with `node src/cli.mjs`.
+Episodes are scene stills from Google Flow with a slow camera move, one ElevenLabs narration MP3 and
+word-by-word captions. 9:16 (1080×1920) by default; 16:9 only when the user asks.
+The user's guide is `INSTRUCTIONS.md`; the image style is `shared-assets/flow-style.md`.
+Run everything from this folder with `node src/cli.mjs`.
 
 ## Workflow (stop at each ⏸ and wait for the user)
 
-1. **Script.** The user saves `projects/<ep>/script.md` (written in ChatGPT from the bible and template).
-   If the project doesn't exist: `create-project <ep> --format vertical`. Then `import-script <ep>`.
-   Report its warnings; fix format mistakes, but ask before changing story or wording.
-2. **Production planning.**
-   - `plan-assets <ep>` writes `production/asset-checklist.md` (scene → assets map and checklist) and
-     `production/missing.json`. Read `missing.json`; don't re-derive it from the scenes.
-   - Write `production/voiceover.md` (format below).
-   - Write `production/flow-prompts.md` only for `missing.sprites` and `missing.backgrounds`, using
-     `shared-assets/flow-style.md` and the character's `shared-assets/cast/<id>.json`. List
-     `missing.approximated` as optional, without prompts unless asked. If nothing is missing, say that
-     all visuals are reused.
-   - Tell the user: how many MP3s, which images to make, and what is reused. ⏸
-3. **The user makes** the MP3s in ElevenLabs and images in Google Flow, and saves them in place.
-4. **Validate.** `check <ep>` lists script problems and missing voiceovers, sprites and backgrounds.
-   Run `sync-assets` to update the asset manifest (`shared-assets/registry.json`). Report anything
-   missing. Don't render until it's clean or the user says to go ahead. ⏸
-5. **Assemble.** `render <ep>` makes a preview (`outbox/<ep>-vN.mp4`). Only changed scenes re-render.
-   After the user approves: `render <ep> --quality final`. `render` prints `WARNING:` if the output fails
-   validation (streams, size, length); report it. Then offer to update "Story so far" in the bible.
+1. **Script.** The user gives a .docx (one episode or a whole season, e.g. `series/<series>/*.docx`).
+   Read it with `textutil -convert txt -stdout <file>.docx`, only the episode being made.
+   `create-project <ep>` (e.g. `makati-ep01`) if the folder doesn't exist.
+2. **Scenes and prompts.** Write `projects/<ep>/production/scenes.md` (format below): one scene per
+   image, following the script's scenes (split a long scene into more images if it needs them).
+3. **Voiceover.** Write `projects/<ep>/production/voiceover.md` (format below). Tell the user how many
+   images to make and the character count. ⏸
+4. **The user saves** `scenes/scene-NN.jpg` (from Flow) and `voiceover.mp3` (from ElevenLabs) in the
+   episode folder. Run `check <ep>` and report anything missing. ⏸
+5. **Assemble.** `assemble <ep>` (add `--wide` for 16:9) transcribes the MP3, cuts between scenes where
+   each scene's narration starts, and writes a preview `outbox/<ep>-vN.mp4`. Report the scene times and
+   any `WARNING:`. After the user approves: `assemble <ep> --quality final`. ⏸
+6. **Post copy.** With every final export, write `projects/<ep>/production/post.md` and show it in chat,
+   ready to paste. The Facebook caption and the YouTube description both start with a title line:
+   `🎬 DOOMMATES | Episode N: <Episode Title>`, then a blank line.
+   - **Facebook Reels:** a scroll-stopping first line (hook, no spoilers of the twist), 1–2 short lines
+     teasing the story, a call to action (follow for the next episode, comment a guess), 3–5 hashtags.
+   - **YouTube Shorts:** a title under 60 characters (catchy, curiosity, include "Day N" or the episode
+     number), a 2–3 line description with the same hook and a call to subscribe, and 3–5 hashtags
+     including #Shorts.
+   Plain English, a few emojis at most, and always "Doommates" plus the season/episode.
+
+## scenes.md
+
+```
+## Scene 01: The Lobby
+Camera: zoom-in
+Narration: It was supposed to be a normal Monday at the office.
+Flow prompt: [style block] Wide shot, low angle. Paul ... Jen ... Night, flickering emergency lights. Tense.
+```
+
+- `Narration:` is one line: the script's narrator words for that scene, unchanged. Captions show these
+  words, so spelling here is what viewers read. No `[tags]` here.
+- `Camera:` one of zoom-in, zoom-out, pan-left, pan-right, pan-up, pan-down, still. Vary them, and
+  match the mood (zoom-in for tension and reveals, zoom-out for endings and wide places, pans for
+  wide places and walking).
+- `Flow prompt:` follows `shared-assets/flow-style.md`. Name the characters in it; the user adds their
+  reference images in Flow. It describes one still image only: no camera motion or animation (the
+  assembler applies `Camera:`, chosen by Claude).
 
 ## voiceover.md
 
-One block per scene with narration, in scene order:
+One block for the whole episode, pasted into ElevenLabs as one generation:
 
 ```
-### scene-05.mp3: The Alley
-Delivery: tense and low, a short pause before the last words.
-[whispers] Four of them came out of the dark. [tense] Marco swung once... and then they ran.
+Delivery: natural, slightly sarcastic in funny moments, serious in danger.
+
+[calm] It was supposed to be a normal Monday at the office. [pause] [whispers] Then the lights went out.
 ```
 
-- The last line is pasted into ElevenLabs as-is. The user's model is **Eleven v3** (free plan), which
-  reads `[tags]` as directions. Use a few tags per line, not many.
-- Keep the words identical to the script's narration: captions show the script text, timed from the MP3.
-  Only add tags, `...` pauses and emphasis.
-- One narrator voice for the whole series. Plain English only. End with the total character count
-  (the free plan has a monthly limit).
-
-## Sprites and assets
-
-- Character images: `shared-assets/cast/<id>/<pose>-<expression>.png`, full body, facing right, on
-  white. If an exact image is missing, the renderer uses the same pose with another face, then
-  standing. A character with no images at all is drawn by code.
-- Expressions: neutral, happy, scared, worried, angry, sad, surprised, determined (zombies: neutral only).
-- Character worksheets (one PNG with many poses) go in `shared-assets/worksheets/<id>.png` (or .jpg). Cut them
-  with `node tools/cut-sprites.mjs` (`--find` lists figure boxes; it saves transparent PNGs with blended
-  edges). Clear the white gaps it reports (arm on hip, hair beside arm) with `@x,y`, but keep eye whites and
-  shoe soles. Check a preview on a dark background before committing. Run single Flow images through it too.
-- New locations: `shared-assets/backgrounds/<location>[-<time>].png`. Prefer the drawn locations.
-- New character: copy a JSON in `shared-assets/cast/` (fields listed in `INSTRUCTIONS.md`).
+- The user's model is **Eleven v3** (free plan), which reads `[tags]` as directions. Use a few tags,
+  not many.
+- The words must be exactly the `Narration:` lines in scene order. Only add tags, `...` pauses and
+  emphasis; the assembler matches the audio to the scene text.
+- One narrator. Plain English. End with the character count (the free plan has a monthly limit).
+  If it's longer than one v3 generation allows (about 5,000 characters), split it into parts and tell
+  the user to join the MP3s into one `voiceover.mp3`.
 
 ## Rules
 
 - Never generate images or audio; write prompts and scripts for the user to generate.
-- Reuse existing assets first. Keep looks consistent with `flow-style.md` and the cast JSONs.
-- Keep tokens low: use CLI output and `production/` files instead of reading engine code or scene JSONs,
-  unless debugging. Ask the user instead of guessing.
-- Don't change `mcp-server/` or `src/render-engine.mjs`: the MCP server uses that older renderer and
-  stays as is. The CLI is the working path.
+- No sound effects or music.
+- Keep tokens low: use CLI output and `production/` files instead of reading engine code, unless
+  debugging. Ask the user instead of guessing.
+- Ask before changing the story or wording of the script.

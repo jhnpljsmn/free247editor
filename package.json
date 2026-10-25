@@ -1,7 +1,7 @@
 {
   "name": "free247editor-automation",
   "version": "1.0.0",
-  "description": "AI Video Automation Engine for free247editor - Automated storytelling video generation",
+  "description": "Doommates episode assembler: scene stills, narration and captions into a video",
   "type": "module",
   "bin": {
     "free247editor": "./src/cli.mjs"
@@ -15,14 +15,13 @@
     "ai-video",
     "storytelling",
     "ffmpeg",
-    "svg-animation"
+    "captions"
   ],
   "license": "MIT",
   "engines": {
     "node": ">=20.11.0"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.32.2",
     "@napi-rs/canvas": "^1.0.13"
   }
 }
