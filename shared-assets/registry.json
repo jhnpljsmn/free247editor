@@ -1,8 +1,43 @@
 {
   "version": "1.0.0",
-  "updated": "2026-10-24T12:45:33.349Z",
+  "updated": "2026-10-25T06:40:52.640Z",
   "assets": {
-    "sprites": {},
+    "sprites": {
+      "jen": {
+        "id": "jen",
+        "path": "shared-assets/cast/jen/",
+        "looks": [
+          "hold-neutral",
+          "idle-happy",
+          "idle-neutral",
+          "idle-scared",
+          "idle-worried",
+          "look-angry",
+          "point-determined",
+          "run-scared",
+          "talk-neutral",
+          "walk-neutral"
+        ]
+      },
+      "paul": {
+        "id": "paul",
+        "path": "shared-assets/cast/paul/",
+        "looks": [
+          "hold-neutral",
+          "idle-angry",
+          "idle-happy",
+          "idle-neutral",
+          "idle-scared",
+          "idle-surprised",
+          "idle-worried",
+          "look-worried",
+          "point-angry",
+          "run-scared",
+          "talk-neutral",
+          "walk-neutral"
+        ]
+      }
+    },
     "backgrounds": {},
     "sounds": {}
   }

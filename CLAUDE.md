@@ -49,8 +49,10 @@ Delivery: tense and low, a short pause before the last words.
   white. If an exact image is missing, the renderer uses the same pose with another face, then
   standing. A character with no images at all is drawn by code.
 - Expressions: neutral, happy, scared, worried, angry, sad, surprised, determined (zombies: neutral only).
-- Character worksheets (one PNG with many poses) go in `shared-assets/worksheets/<id>.png` (or .jpg); Claude crops
-  them into the sprite files above, after confirming with the user which drawing is which pose/expression.
+- Character worksheets (one PNG with many poses) go in `shared-assets/worksheets/<id>.png` (or .jpg). Cut them
+  with `node tools/cut-sprites.mjs` (`--find` lists figure boxes; it saves transparent PNGs with blended
+  edges). Clear the white gaps it reports (arm on hip, hair beside arm) with `@x,y`, but keep eye whites and
+  shoe soles. Check a preview on a dark background before committing. Run single Flow images through it too.
 - New locations: `shared-assets/backgrounds/<location>[-<time>].png`. Prefer the drawn locations.
 - New character: copy a JSON in `shared-assets/cast/` (fields listed in `INSTRUCTIONS.md`).
 
