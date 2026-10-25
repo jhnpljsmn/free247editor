@@ -1,4 +1,0 @@
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-zombie-ep1/renders/final/scene-01.mp4'
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-zombie-ep1/renders/final/scene-02.mp4'
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-zombie-ep1/renders/final/scene-03.mp4'
-file '/Users/jensiman/Documents/AI Video Automation/Projects/free247editor/projects/test-zombie-ep1/renders/final/scene-04.mp4'

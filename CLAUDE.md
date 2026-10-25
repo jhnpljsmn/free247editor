@@ -49,6 +49,8 @@ Delivery: tense and low, a short pause before the last words.
   white. If an exact image is missing, the renderer uses the same pose with a neutral face, then
   standing. A character with no images at all is drawn by code.
 - Expressions: neutral, happy, scared, angry, sad, surprised, determined (zombies: neutral only).
+- Character worksheets (one PNG with many poses) go in `shared-assets/worksheets/<id>.png`; Claude crops
+  them into the sprite files above, after confirming with the user which drawing is which pose/expression.
 - New locations: `shared-assets/backgrounds/<location>[-<time>].png`. Prefer the drawn locations.
 - New character: copy a JSON in `shared-assets/cast/` (fields listed in `INSTRUCTIONS.md`).
 
@@ -60,4 +62,3 @@ Delivery: tense and low, a short pause before the last words.
   unless debugging. Ask the user instead of guessing.
 - Don't change `mcp-server/` or `src/render-engine.mjs`: the MCP server uses that older renderer and
   stays as is. The CLI is the working path.
-- `projects/test-zombie-ep1` is the test episode for checking engine changes.
