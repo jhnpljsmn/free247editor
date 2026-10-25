@@ -7,26 +7,27 @@ part of the same series. Claude Code writes the prompts in `projects/<episode>/p
 
 **Style block:**
 
-> Flat 2D cartoon stick figure, simple vector style, thick clean dark outlines, solid flat colors,
-> no shading, no gradients, no texture. Round head with simple dot eyes, small eyebrows and a simple
-> expressive mouth. Thin stick arms and legs, simple rectangular shirt. Full body visible from head
-> to feet, centered, side view facing right. Plain pure white background, no ground, no shadow,
-> no text, no other objects.
+> 2D cartoon character in the same style as the reference image: big round head about one third of
+> the body height, simple friendly face with clear eyes, eyebrows and mouth, thick dark outlines,
+> flat colors with light cel shading, loose t-shirt and shorts, thin black stick arms and legs,
+> black-and-white sneakers. Full body visible from head to feet, centered, turned toward the right.
+> Plain pure white background, no ground, no shadow, no text, no labels, no other objects.
+
+Always add the character's worksheet (`shared-assets/worksheets/<character>.jpg`) as a reference image.
 
 **Then add:** who it is (from `shared-assets/cast/<character>.json`: colors, hair, hat, accessory,
 what they hold), the pose, and the expression.
 
 **Example:**
 
-> [style block] Character: Marco, an adult man with tan skin, red t-shirt, dark blue pants, blue
-> baseball cap, holding a crowbar in his right hand. Pose: running, mid-stride, leaning forward.
-> Expression: scared, wide eyes, open mouth.
+> [style block] Character: Paul, young man with tan skin, short black hair, thin mustache and goatee,
+> green t-shirt, dark grey shorts. Pose: standing idle, arms relaxed. Expression: happy, wide smile.
 
 **Keep characters consistent:**
-1. Make `idle-neutral` first for each character, and pick the best result.
-2. For every other pose or expression, add that `idle-neutral` image as a reference image in Flow.
+1. Put the character's worksheet in Flow as a reference image for every prompt.
+2. One pose and one expression per image, full body. Faces alone can't be used as sprites.
 3. Save as `shared-assets/cast/<character>/<pose>-<expression>.png`, for example
-   `shared-assets/cast/marco/run-scared.png`. The white background is removed automatically.
+   `shared-assets/cast/paul/idle-happy.png`. The white background is removed automatically.
 
 ## Backgrounds
 
