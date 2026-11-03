@@ -20,3 +20,4 @@ __pycache__/
 # Episodes (scripts, images, voiceovers) stay local
 projects/*
 !projects/.gitkeep
+*.docx

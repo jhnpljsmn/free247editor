@@ -22,10 +22,22 @@ these exact words:
 - **Jen:** young woman, light tan skin, long straight black hair past the shoulders, purple t-shirt,
   dark grey shorts, black-and-white sneakers.
 - **Zombies:** grey-green skin, torn office clothes, blank white eyes; threatening but not graphic.
-- **The woman in orange (S1E2):** woman in her thirties, medium brown skin, short black hair tied
+- **The woman in orange (Project Echo S1E2):** woman in her thirties, medium brown skin, short black hair tied
   back, orange maintenance jacket with a reflective stripe, dark work pants, black boots.
+- **Mara (Project Echo S2E2):** woman in her forties, dark brown skin, short curly black hair with grey streaks,
+  faded olive field jacket over a grey sweater, white cloth armband on her sleeve, dark cargo pants,
+  worn brown boots.
+- **The older couple (Project Echo S2E3, from the library shelter):** a man in his sixties, light brown skin,
+  short grey hair, round glasses, worn brown wool coat; and a woman in her sixties, medium brown skin,
+  grey hair in a low bun, worn navy coat, knitted red scarf.
+- **The map survivors (Project Echo S2E4, met at Rockefeller Center):** a man in his twenties, dark brown
+  skin, short black twists, dusty grey hoodie, faded blue jeans, red backpack; and a woman in her
+  twenties, pale skin with freckles, auburn hair in a messy ponytail, mustard-yellow raincoat, black leggings.
+- **Echo's crews (Project Echo S2E4):** figures in white hazmat suits with hoods and dark tinted visors,
+  black gloves and boots; faces never shown. They arrive in unmarked black vans with tinted windows.
 
-New character: add a line here the first time they appear.
+New character (from either series): add a line here the first time they appear, with the series and
+episode, so any later episode can reuse the exact look. Never change Paul's or Jen's lines.
 
 ## Prompt order
 
