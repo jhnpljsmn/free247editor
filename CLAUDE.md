@@ -10,7 +10,12 @@ Run everything from this folder with `node src/cli.mjs`.
 | Series | What it is | Scripts | Projects |
 |---|---|---|---|
 | **Doommates: Project Echo** | Main story, Paul and Jen. S1 Makati, S2 New York | `series/zombie-outbreak/` | `<city>-epNN` (e.g. `newyork-ep01`) |
-| **Doommates: What If?** | Standalone survival episodes, any characters or scenario | `series/what-if/` | `whatif-epNN` |
+| **Doommates: What If?** | Standalone survival episodes, any characters or scenario | `series/what-if/` | `whatif-s<N>-epNN` (e.g. `whatif-s1-ep01`) |
+
+What If? seasons only group files (S1 = `series/what-if/doomates-whatif-s1.docx`, 6 episodes). Every
+episode is self-contained, with no story carried between episodes and no "previously" or "next episode" teasers. The
+season never shows publicly: captions, badge and YT titles say "Episode <n>" only. The script calls the
+series "Survival Mode"; the public name is still "Doommates: What If?".
 
 Characters live in `shared-assets/flow-style.md`. Before writing prompts, use the look saved there; when
 a new character appears, add them there (never change Paul's or Jen's lines).
@@ -20,11 +25,12 @@ a new character appears, add them there (never change Paul's or Jen's lines).
 1. **Script.** The user gives a .docx (one episode or a whole season, e.g. `series/<series>/*.docx`).
    Read it with `textutil -convert txt -stdout <file>.docx`, only the episode being made.
    `create-project <ep>` (e.g. `makati-ep01`) if the folder doesn't exist.
-2. **Scenes and prompts.** Write `projects/<ep>/production/scenes.md` (format below): one scene per
-   image, following the script's scenes (split a long scene into more images if it needs them).
-   End it with a `## Thumbnail` block (format below).
+2. **Hook.** Propose 2–3 hooks in chat (see "Hook (Scene 00)" below). ⏸ The user picks or edits one.
+   **Scenes and prompts.** Write `projects/<ep>/production/scenes.md` (format below), starting with
+   `## Scene 00: Hook`, then one scene per image, following the script's scenes (split a long scene
+   into more images if it needs them). End it with a `## Thumbnail` block (format below).
 3. **Voiceover.** Write `projects/<ep>/production/voiceover.md` (format below). Tell the user how many
-   images to make and the character count. If the narration is over about 430 words, warn the user
+   images to make and the character count. If the narration, hook included, is over about 430 words, warn the user
    it may run past 3 minutes and suggest trims (don't cut without asking). ⏸
 4. **The user saves** `scenes/scene-NN.jpg` (from Flow) and `voiceover.mp3` (from ElevenLabs) in the
    episode folder. Run `check <ep>` and report anything missing. ⏸
@@ -98,6 +104,21 @@ Delivery: natural, slightly sarcastic in funny moments, serious in danger.
 - One narrator. Plain English. End with the character count (the free plan has a monthly limit).
   If it's longer than one v3 generation allows (about 5,000 characters), split it into parts and tell
   the user to join the MP3s into one `voiceover.mp3`.
+
+### Hook (Scene 00)
+
+Every new episode (both series) opens with a hook so viewers don't swipe away in the first seconds.
+Like the outro, it's an approved exception to "don't change the wording"; the script's lines stay
+unchanged from Scene 01 on.
+- Offer 2–3 options in chat, one each: flash-forward (open on the peak moment), stakes/challenge,
+  and a question to the viewer. 1–2 sentences, about 15 words or fewer, under about 4 seconds.
+- Start mid-action or with a direct challenge. No greeting, no series name, no "in this episode".
+  Never spoil the ending or the twist. A flash-forward ends with a time jump (e.g. "Ten minutes
+  earlier...") so the story can start.
+- Scene 00 image: a close-up of the peak moment with a strong expression and high contrast. Camera
+  zoom-in or still. No text in the image. The thumbnail may reuse this moment.
+- In voiceover.md the hook comes first, with an urgent tag (e.g. `[urgent]` or `[whispers]`) and a
+  `...` pause before Scene 01.
 
 ### Episode ending (outro)
 

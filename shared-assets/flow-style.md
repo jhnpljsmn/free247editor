@@ -36,6 +36,22 @@ these exact words:
 - **Echo's crews (Project Echo S2E4):** figures in white hazmat suits with hoods and dark tinted visors,
   black gloves and boots; faces never shown. They arrive in unmarked black vans with tinted windows.
 
+## What If? looks
+
+In Doommates: What If?, Paul and Jen wear different clothes from Project Echo. Use these lines (not the
+ones above) and their What If? reference sheets in Flow: `shared-assets/whatif-jen-sheet.jpg` and
+`shared-assets/whatif-paul-sheet.jpg`. An episode may change footwear or props when the story needs it
+(e.g. duck slippers at home), but keep the rest.
+
+- **Jen (What If?):** young woman, light tan skin, black hair in a messy high bun with loose strands
+  framing her face, small black clover-shaped earrings with gold trim, maroon t-shirt, small black
+  crossbody bag on a thin strap, light blue denim shorts with rolled cuffs, white socks, cream sneakers
+  with blue and red stripes.
+- **Paul (What If?):** young man, tan skin, short black hair, thin mustache and goatee, small black stud
+  earrings, black t-shirt, light blue denim shorts, maroon sneakers with white stripes.
+- **Paul's coworker (What If? S1E2):** woman in her twenties, medium brown skin, shoulder-length wavy
+  black hair, light blue blouse, black slacks, black flats.
+
 New character (from either series): add a line here the first time they appear, with the series and
 episode, so any later episode can reuse the exact look. Never change Paul's or Jen's lines.
 

@@ -19,7 +19,8 @@ Claude Code writes two files in `projects/<episode>/production/`:
 
 - **Google Flow:** for each scene, paste its prompt and add Paul's and Jen's reference images. Save the
   image as `projects/<episode>/scenes/scene-01.jpg`, `scene-02.jpg`, and so on (the number matches the
-  scene). Make images 9:16 (or 16:9 if you want a wide video).
+  scene). Make images 9:16 (or 16:9 if you want a wide video). New episodes start with a hook image,
+  `scene-00.jpg`, so make that one too.
 - **ElevenLabs (Eleven v3):** paste the voiceover text, generate, and save it as
   `projects/<episode>/voiceover.mp3`. Read the words as written: only the tags can change.
 
