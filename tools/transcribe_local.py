@@ -12,7 +12,7 @@ video, model_name = sys.argv[1], sys.argv[2]
 
 def transcribe(device, compute_type):
     model = WhisperModel(model_name, device=device, compute_type=compute_type)
-    segments, _ = model.transcribe(video, word_timestamps=True, vad_filter=True)
+    segments, _ = model.transcribe(video, language='en', word_timestamps=True, vad_filter=True)
     return [
         {"text": w.word.strip(), "start": round(w.start, 3), "end": round(w.end, 3)}
         for s in segments
