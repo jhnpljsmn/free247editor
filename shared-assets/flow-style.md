@@ -36,6 +36,12 @@ these exact words:
 - **Echo's crews (Project Echo S2E4):** figures in white hazmat suits with hoods and dark tinted visors,
   black gloves and boots; faces never shown. They arrive in unmarked black vans with tinted windows.
 
+- **Echo zone guards (Project Echo S3E1, Tokyo):** figures in dark navy uniforms with white armbands
+  and navy caps, handheld wristband scanners; faces in shadow under the caps.
+- **The turned-away family (Project Echo S3E1):** a father in his thirties, light brown skin, short black
+  hair, grey windbreaker; a mother in her thirties, light skin, black bob haircut, beige coat; and their
+  daughter of about six, pale feverish face, flushed cheeks, pink raincoat, wrapped in a blanket.
+
 ## What If? looks
 
 In Doommates: What If?, Paul and Jen wear different clothes from Project Echo. Use these lines (not the
@@ -51,6 +57,20 @@ ones above) and their What If? reference sheets in Flow: `shared-assets/whatif-j
   earrings, black t-shirt, light blue denim shorts, maroon sneakers with white stripes.
 - **Paul's coworker (What If? S1E2):** woman in her twenties, medium brown skin, shoulder-length wavy
   black hair, light blue blouse, black slacks, black flats.
+- **The van driver (What If? Ep3, flood):** man in his forties, medium brown skin, short black hair,
+  stubble, dark blue work shirt, grey cap. Drives a plain white delivery van with no logos.
+- **The older diner (What If? Ep3):** woman in her seventies, light skin, short white curly hair,
+  lavender cardigan, wooden cane.
+- **The young customer (What If? Ep3):** man in his twenties, light brown skin, short wavy brown hair,
+  grey hoodie, black jeans.
+- **The bride (What If? Ep4, wedding):** woman in her late twenties, medium tan skin, dark brown hair
+  in a low bun, long white wedding gown, short sheer veil, bouquet of pink roses.
+- **The groom (What If? Ep4):** man in his early thirties, light brown skin, short neat black hair,
+  clean-shaven, navy suit, white shirt, white rose boutonniere.
+- **The event coordinator (What If? Ep4):** woman in her forties, dark brown skin, short black natural
+  hair, black blazer and black pants, wireless headset, clipboard.
+- **The worried guest (What If? Ep4):** man in his fifties, light skin, balding with grey sides, beige
+  suit, loosened pink tie.
 
 New character (from either series): add a line here the first time they appear, with the series and
 episode, so any later episode can reuse the exact look. Never change Paul's or Jen's lines.
