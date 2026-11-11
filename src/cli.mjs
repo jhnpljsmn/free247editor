@@ -11,6 +11,7 @@ for (const dir of ['/opt/homebrew/bin', '/usr/local/bin']) {
 }
 
 const { assembleEpisode, checkEpisode } = await import('./assemble.mjs');
+const { generateVoiceover } = await import('./voiceover.mjs');
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const projects = join(root, 'projects');
 const [command, ep] = process.argv.slice(2);
@@ -29,6 +30,7 @@ Commands:
   list-projects                                  List episodes
   delete-project <ep>                            Delete an episode folder
   check <ep>                                     List missing images, narration or voiceover.mp3
+  voiceover <ep> [--force]                       Generate voiceover.mp3 from production/voiceover.md (ElevenLabs)
   assemble <ep> [--wide] [--quality final]       Build outbox/<ep>-vN.mp4 (9:16; --wide for 16:9)
 `);
 }
@@ -56,6 +58,14 @@ try {
       const { scenes, problems } = checkEpisode(join(projects, ep));
       console.log(`${scenes.length} scenes`);
       console.log(problems.length ? problems.map((p) => `  - ${p}`).join('\n') : 'Ready to assemble.');
+      break;
+    }
+    case 'voiceover': {
+      const r = await generateVoiceover(ep, { force: flag('--force') });
+      console.log(`Wrote ${r.out} (${r.chars} characters, ${r.parts} part${r.parts > 1 ? 's' : ''}, ${r.model})`);
+      const u = r.usage;
+      if (u) console.log(`Credits: ${u.used.toLocaleString()} / ${u.limit.toLocaleString()} used, ${(u.limit - u.used).toLocaleString()} left, resets ${u.reset.toISOString().slice(0, 10)}`);
+      else console.log('Credits: unavailable (give the API key User: Read to show usage)');
       break;
     }
     case 'assemble': {

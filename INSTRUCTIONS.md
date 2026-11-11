@@ -21,8 +21,21 @@ Claude Code writes two files in `projects/<episode>/production/`:
   image as `projects/<episode>/scenes/scene-01.jpg`, `scene-02.jpg`, and so on (the number matches the
   scene). Make images 9:16 (or 16:9 if you want a wide video). New episodes start with a hook image,
   `scene-00.jpg`, so make that one too.
-- **ElevenLabs (Eleven v3):** paste the voiceover text, generate, and save it as
-  `projects/<episode>/voiceover.mp3`. Read the words as written: only the tags can change.
+- **ElevenLabs (Eleven v3):** once you approve `voiceover.md`, Claude Code runs
+  `node src/cli.mjs voiceover <episode>`, which generates `projects/<episode>/voiceover.mp3` for you.
+  To regenerate, add `--force` (the old file is kept as `voiceover.prev.mp3`). Pasting into ElevenLabs
+  by hand still works: save the MP3 to the same path.
+
+### One-time ElevenLabs setup
+
+In ElevenLabs, open **Developers → API Keys** and create a key restricted to **Text to Speech** only.
+Copy your narrator's **Voice ID** from the voice's menu in **Voices**. Add both to `.env` in this
+folder (it's never committed):
+
+```
+ELEVENLABS_API_KEY=sk_...
+ELEVENLABS_VOICE_ID=...
+```
 
 ## 4. Assemble
 

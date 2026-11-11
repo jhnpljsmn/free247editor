@@ -31,9 +31,12 @@ a new character appears, add them there (never change Paul's or Jen's lines).
    into more images if it needs them). End it with a `## Thumbnail` block (format below).
 3. **Voiceover.** Write `projects/<ep>/production/voiceover.md` (format below). Tell the user how many
    images to make and the character count. If the narration, hook included, is over about 430 words, warn the user
-   it may run past 3 minutes and suggest trims (don't cut without asking). ⏸
-4. **The user saves** `scenes/scene-NN.jpg` (from Flow) and `voiceover.mp3` (from ElevenLabs) in the
-   episode folder. Run `check <ep>` and report anything missing. ⏸
+   it may run past 3 minutes and suggest trims (don't cut without asking). ⏸ Only after the user
+   approves the voiceover (and outro), run `voiceover <ep>`: it sends the block to ElevenLabs and saves
+   `voiceover.mp3`. It spends credits, so never run it before approval, and pass `--force` (which keeps
+   the old file as `voiceover.prev.mp3`) only when the user asks for a regeneration.
+4. **The user saves** `scenes/scene-NN.jpg` (from Flow) in the episode folder. Run `check <ep>` and
+   report anything missing. ⏸
 5. **Assemble.** `assemble <ep>` (add `--wide` for 16:9) transcribes the MP3, cuts between scenes where
    each scene's narration starts, and writes a preview `outbox/<ep>-vN.mp4`. Report the scene times and
    any `WARNING:`. Flow saves images as `scene-NN_2K_<timestamp>.jpg`; rename them to `scene-NN.jpg`
@@ -89,7 +92,8 @@ misspells the headline or badge.
 
 ## voiceover.md
 
-One block for the whole episode, pasted into ElevenLabs as one generation:
+One block for the whole episode, inside a ``` fence (what `voiceover <ep>` sends to ElevenLabs; the
+`Delivery:` line is skipped):
 
 ```
 Delivery: natural, slightly sarcastic in funny moments, serious in danger.
@@ -97,13 +101,12 @@ Delivery: natural, slightly sarcastic in funny moments, serious in danger.
 [calm] It was supposed to be a normal Monday at the office. [pause] [whispers] Then the lights went out.
 ```
 
-- The user's model is **Eleven v3** (free plan), which reads `[tags]` as directions. Use a few tags,
+- The user's model is **Eleven v3** (Creator plan, via the API), which reads `[tags]` as directions. Use a few tags,
   not many.
 - The words must be exactly the `Narration:` lines in scene order. Only add tags, `...` pauses and
   emphasis; the assembler matches the audio to the scene text.
-- One narrator. Plain English. End with the character count (the free plan has a monthly limit).
-  If it's longer than one v3 generation allows (about 5,000 characters), split it into parts and tell
-  the user to join the MP3s into one `voiceover.mp3`.
+- One narrator. Plain English. After the fence, give the character count (credits are monthly).
+  Over 5,000 characters, `voiceover <ep>` splits it at paragraphs and joins the parts itself.
 
 ### Hook (Scene 00)
 
