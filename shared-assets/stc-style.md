@@ -31,6 +31,9 @@ so Flow doesn't add stick figures. Scenes with unnamed crowd extras keep the ful
 - **Mister Reyes (Day 1, your neighbor in 2704):** older stick figure, small tuft of grey hair, round
   glasses, blue bathrobe.
 
+- **Your friend (Would You Survive? #2):** classic stick figure, yellow cap, white bandage with a small
+  red stain on the forearm.
+
 New character: add a line here the first time they appear, with the episode (e.g. "Day 3").
 
 ## Reference sheets

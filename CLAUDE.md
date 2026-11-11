@@ -33,7 +33,9 @@ Same workflow below, with these differences:
   in `stc-style.md`. Scene 00 is the hook, written from the bible's formulas. Scenes with no people
   use the place-only block from `stc-style.md`, not the full style block.
 - **Ending:** A ends with the 2-way vote and a follow line; B with "Comment 1, 2 or 3" and a pointer
-  to the next Day N. No Doommates outro.
+  to the main series that describes it ("There's a story on our channel where your comments decide what
+  happens next.") plus a soft closer, alternating "It's waiting for you." and "Think you'd make it?"
+  (never a command like "Go find it"), never "Day N" alone: B viewers have not seen Series A. No Doommates outro.
 - **Thumbnail:** badge "DAY 1" or "WOULD YOU? #1"; red as the accent color.
 - **Post copy** header: `🎬 SURVIVE THE CHOICE | Day <n>: <Title>` or `🎬 SURVIVE THE CHOICE | Would
   You Survive? #<n>`. YT title is second-person or a question (e.g. "You Have 1 Hour on Floor 27 😱"),

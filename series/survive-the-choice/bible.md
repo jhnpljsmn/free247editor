@@ -12,10 +12,12 @@ the hero and the comments decide what happens next. Built from the viral Shorts 
 | Length | 2:00–2:50 (hard limit 3:00) | 20–30 s |
 | Images | ~50 (cut every 2–3 s) | 8–10 |
 | Ending | a 2-way vote: "Comment ROOF or STAIRS" | 3 numbered choices: "Comment 1, 2 or 3" |
-| Next | the most-liked comment decides Day N+1 | the answer opens the next B Short |
+| Next | the most-liked comment decides Day N+1 | the next B Short opens with its own hook, then "But first, last time's answer" |
 
-Cadence: A twice a week (e.g. Mon, Thu), B on the days between. Every B ends by pointing to the
-next Day N episode.
+Cadence: A twice a week (e.g. Mon, Thu), B on the days between. Every B ends by pointing to Series
+A in plain words ("There's a story on our channel where your comments decide what happens next.")
+plus a soft closer, alternating "It's waiting for you." and "Think you'd make it?" (never a
+command), never "Day N" alone: B viewers have not seen it.
 
 ## Voice rules (both formats)
 
