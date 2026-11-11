@@ -11,6 +11,7 @@ Run everything from this folder with `node src/cli.mjs`.
 |---|---|---|---|
 | **Doommates: Project Echo** | Main story, Paul and Jen. S1 Makati, S2 New York | `series/zombie-outbreak/` | `<city>-epNN` (e.g. `newyork-ep01`) |
 | **Doommates: What If?** | Standalone survival episodes, any characters or scenario | `series/what-if/` | `whatif-s<N>-epNN` (e.g. `whatif-s1-ep01`) |
+| **Survive The Choice** (separate channel) | Stickman "you" survival, viewers vote the next move | `series/survive-the-choice/bible.md` | `stc-dayNN`, `stc-wysNN` |
 
 What If? seasons only group files (S1 = `series/what-if/doomates-whatif-s1.docx`, 6 episodes). Every
 episode is self-contained, with no story carried between episodes and no "previously" or "next episode" teasers. The
@@ -19,6 +20,26 @@ series "Survival Mode"; the public name is still "Doommates: What If?".
 
 Characters live in `shared-assets/flow-style.md`. Before writing prompts, use the look saved there; when
 a new character appears, add them there (never change Paul's or Jen's lines).
+
+## Survive The Choice (separate channel)
+
+Follow `series/survive-the-choice/bible.md` (formats, voice rules, hook formulas, season spine, votes
+log) and `shared-assets/stc-style.md` (its own style block and characters; never Paul or Jen).
+Same workflow below, with these differences:
+- **Step 1:** there is no .docx. Claude drafts the episode straight into `scenes.md`; the script, hook
+  and vote ending are approved together at the ⏸ in step 3. Before writing Day N, check the votes
+  log; if the previous vote has no winner yet, ask.
+- **Scenes:** cut every 2–3 s (about 6–8 narration words per scene). Reuse Flow variants as described
+  in `stc-style.md`. Scene 00 is the hook, written from the bible's formulas. Scenes with no people
+  use the place-only block from `stc-style.md`, not the full style block.
+- **Ending:** A ends with the 2-way vote and a follow line; B with "Comment 1, 2 or 3" and a pointer
+  to the next Day N. No Doommates outro.
+- **Thumbnail:** badge "DAY 1" or "WOULD YOU? #1"; red as the accent color.
+- **Post copy** header: `🎬 SURVIVE THE CHOICE | Day <n>: <Title>` or `🎬 SURVIVE THE CHOICE | Would
+  You Survive? #<n>`. YT title is second-person or a question (e.g. "You Have 1 Hour on Floor 27 😱"),
+  under 60 characters. Hashtags: #SurviveTheChoice #Stickman #ZombieApocalypse (+ #Shorts on YT).
+- **Research:** `research ["query" ...]` refreshes the viral Shorts report in `research/`
+  (~100 API units per query, 10,000/day free).
 
 ## Workflow (stop at each ⏸ and wait for the user)
 
@@ -62,6 +83,7 @@ a new character appears, add them there (never change Paul's or Jen's lines).
 ## Scene 01: The Lobby
 Camera: zoom-in
 Narration: It was supposed to be a normal Monday at the office.
+Characters: Paul, Jen
 Flow prompt: [style block] Wide shot, low angle. Paul ... Jen ... Night, flickering emergency lights. Tense.
 ```
 
@@ -70,6 +92,9 @@ Flow prompt: [style block] Wide shot, low angle. Paul ... Jen ... Night, flicker
 - `Camera:` one of zoom-in, zoom-out, pan-left, pan-right, pan-up, pan-down, still. Vary them, and
   match the mood (zoom-in for tension and reveals, zoom-out for endings and wide places, pans for
   wide places and walking).
+- `Characters:` goes right before every `Flow prompt:` (the Thumbnail block too). It names whose
+  reference images to add in Flow, or "none"; mark partial shots, e.g. "Zombie (hands only)". A
+  "same as Scene NN" scene repeats that scene's line.
 - `Flow prompt:` follows `shared-assets/flow-style.md`. Name the characters in it; the user adds their
   reference images in Flow. It describes one still image only: no camera motion or animation (the
   assembler applies `Camera:`, chosen by Claude).
@@ -146,3 +171,5 @@ update both files and recount.
 - Keep tokens low: use CLI output and `production/` files instead of reading engine code, unless
   debugging. Ask the user instead of guessing.
 - Ask before changing the story or wording of the script.
+- YT titles (all series): use "you" or a question, never the episode number alone (viral Shorts research,
+  2026-11-11).

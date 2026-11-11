@@ -12,6 +12,7 @@ for (const dir of ['/opt/homebrew/bin', '/usr/local/bin']) {
 
 const { assembleEpisode, checkEpisode } = await import('./assemble.mjs');
 const { generateVoiceover } = await import('./voiceover.mjs');
+const { research, DEFAULT_QUERIES } = await import('./research.mjs');
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const projects = join(root, 'projects');
 const [command, ep] = process.argv.slice(2);
@@ -32,6 +33,7 @@ Commands:
   check <ep>                                     List missing images, narration or voiceover.mp3
   voiceover <ep> [--force]                       Generate voiceover.mp3 from production/voiceover.md (ElevenLabs)
   assemble <ep> [--wide] [--quality final]       Build outbox/<ep>-vN.mp4 (9:16; --wide for 16:9)
+  research ["query" ...] [--days 90] [--top 30]  Rank viral Shorts (YouTube Data API) into research/<date>.md
 `);
 }
 
@@ -75,6 +77,18 @@ try {
       if (r.matched < 0.8) console.log('WARNING: low match; the voiceover may not follow the scenes.md narration.');
       for (const p of r.problems) console.log(`WARNING: ${p}`);
       console.log(`Output: ${r.outputPath} (${r.duration.toFixed(1)}s)`);
+      break;
+    }
+    case 'research': {
+      const rest = process.argv.slice(3);
+      const queries = rest.filter((a, i) => !a.startsWith('--') && !(i > 0 && rest[i - 1].startsWith('--')));
+      const r = await research(queries.length ? queries : DEFAULT_QUERIES, {
+        days: Number(option('--days', 90)),
+        top: Number(option('--top', 30)),
+      });
+      console.log(`Found ${r.count} Shorts (~${r.units} API units used of 10,000/day).`);
+      console.log(`Report: ${r.mdPath}`);
+      console.log(`Raw data: ${r.jsonPath}`);
       break;
     }
     default:

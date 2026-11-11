@@ -21,3 +21,6 @@ __pycache__/
 projects/*
 !projects/.gitkeep
 *.docx
+
+# Viral Shorts research output
+research/
